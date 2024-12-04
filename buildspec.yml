@@ -2,6 +2,11 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      # Debug: Print environment variables
+      - echo "AWS Account ID = $AWS_ACCOUNT_ID"
+      - echo "AWS Region = $AWS_DEFAULT_REGION"
+      - echo "Repository URI = $REPOSITORY_URI"
+      - echo "Image tag = $IMAGE_TAG"
       # Login to ECR
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       # Set variables
@@ -11,6 +16,9 @@ phases:
       - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/nginx:alpine
   build:
     commands:
+      # Debug: Print Dockerfile contents
+      - echo "Dockerfile contents:"
+      - cat Dockerfile
       # Build using the ECR-hosted base image
       - docker build --build-arg AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID --build-arg AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -t $REPOSITORY_URI:$IMAGE_TAG .
   post_build:
