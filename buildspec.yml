@@ -2,30 +2,23 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      # First set the variables
       - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/anycompany-repo
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      # Debug: Print environment variables
       - echo "AWS Account ID = $AWS_ACCOUNT_ID"
       - echo "AWS Region = $AWS_DEFAULT_REGION"
       - echo "Repository URI = $REPOSITORY_URI"
       - echo "Image tag = $IMAGE_TAG"
-      # Then login to ECR
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-      # Pull the base nginx image from ECR
       - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/nginx:alpine
   build:
     commands:
-      # Debug: Print Dockerfile contents
-      - echo "Dockerfile contents:"
-      - cat Dockerfile
-      # Build using the ECR-hosted base image
       - docker build --build-arg AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID --build-arg AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -t $REPOSITORY_URI:$IMAGE_TAG .
   post_build:
     commands:
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Creating image definitions file...
-      - echo '[{"name":"container_name","imageUri":"'$REPOSITORY_URI:$IMAGE_TAG'"}]' > imageDefinitions.json
+      # Replace 'nginx-container' with your actual ECS task definition container name
+      - echo '[{"name":"anycompany-task","imageUri":"'$REPOSITORY_URI:$IMAGE_TAG'"}]' > imageDefinitions.json
 artifacts:
   files:
     - imageDefinitions.json
