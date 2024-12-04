@@ -1,7 +1,5 @@
 # Use the official NGINX base image
-ARG AWS_ACCOUNT_ID
-ARG AWS_DEFAULT_REGION
-FROM ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/nginx:alpine
+FROM 841162696521.dkr.ecr.us-east-1.amazonaws.com/nginx:alpine
 # Variables defined in buildspec.yml
 COPY ./html /usr/share/nginx/html
 # Expose port 80 for the web server
