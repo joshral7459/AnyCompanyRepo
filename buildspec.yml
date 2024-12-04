@@ -2,12 +2,17 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      # Login to ECR
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      # Set variables
       - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/anycompany-repo
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      # Pull the base nginx image from ECR (assuming you've already copied it there)
+      - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/nginx:alpine
   build:
     commands:
-      - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
+      # Build using the ECR-hosted base image
+      - docker build --build-arg AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID --build-arg AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -t $REPOSITORY_URI:$IMAGE_TAG .
   post_build:
     commands:
       - docker push $REPOSITORY_URI:$IMAGE_TAG
