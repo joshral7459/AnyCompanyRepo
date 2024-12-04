@@ -7,7 +7,7 @@ phases:
       # Set variables
       - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/anycompany-repo
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      # Pull the base nginx image from ECR (assuming you've already copied it there)
+      # Pull the base nginx image from ECR
       - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/nginx:alpine
   build:
     commands:
@@ -16,6 +16,9 @@ phases:
   post_build:
     commands:
       - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - printf '{"ImageURI":"%s"}' $REPOSITORY_URI:$IMAGE_TAG > imageDefinitions.json
+      - echo Creating image definitions file...
+      - echo '[{"name":"container_name","imageUri":"'$REPOSITORY_URI:$IMAGE_TAG'"}]' > imageDefinitions.json
 artifacts:
-  files: imageDefinitions.json
+  files:
+    - imageDefinitions.json
+  name: imagedefinitions
