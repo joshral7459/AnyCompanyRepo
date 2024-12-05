@@ -196,8 +196,7 @@
             <li><a href="#">Reports</a></li>
         </ul>
     </nav>
-    </style>
-</head>
+
 <body>
     <div class="user-info">
         Welcome, Employee | ID: EMP123 | <a href="#" style="color: white;">Logout</a>
