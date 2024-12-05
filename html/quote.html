@@ -176,6 +176,23 @@
         .nav-bar a:hover {
             background-color: #1a4567;
         }
+
+        .error-message {
+            display: none;
+            background-color: #ffebee;
+            border: 1px solid #ef5350;
+            color: #c62828;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .error-details {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -190,7 +207,7 @@
     <nav class="nav-bar">
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="quote-tool.html">Quote Tool</a></li>
+            <li><a href="quote.html">Quote Tool</a></li>
             <li><a href="#">Claims</a></li>
             <li><a href="#">Customers</a></li>
             <li><a href="#">Reports</a></li>
@@ -199,6 +216,13 @@
     </style>
 </head>
 <body>
+    <div class="user-info">
+        Welcome, Employee | ID: EMP123 | <a href="#" style="color: white;">Logout</a>
+    </div>
+    <div class="header">
+        <h1>AnyCompany Insurance Quote Tool</h1>
+    </div>
+
     <div class="container">
         <form id="quoteForm">
             <div class="form-section">
@@ -265,6 +289,17 @@
                 <button type="reset" class="reset-btn">Reset Form</button>
                 <button type="button" class="save-btn">Save Quote</button>
             </div>
+
+            <div class="container">
+                <!-- Add error message container -->
+                <div id="errorMessage" class="error-message">
+                    <strong>Error:</strong> Request could not be completed, please contact support.
+                    <div class="error-details">
+                        Error Reference: ERR-<span id="errorRef"></span>
+                        <br>
+                        Time: <span id="errorTime"></span>
+                    </div>
+                </div>
         </form>
 
         <div id="quoteResults">
@@ -285,39 +320,81 @@
     </div>
 
     <script>
-function calculateQuote() {
-            // This is a simple example calculation
-            const coverageAmount = document.getElementById('coverageAmount').value;
-            const riskLevel = document.getElementById('riskLevel').value;
-            const term = document.getElementById('term').value;
-
-            let riskMultiplier;
-            switch(riskLevel) {
-                case 'low':
-                    riskMultiplier = 0.01;
-                    break;
-                case 'medium':
-                    riskMultiplier = 0.015;
-                    break;
-                case 'high':
-                    riskMultiplier = 0.02;
-                    break;
-                default:
-                    riskMultiplier = 0.01;
-            }
-
-            // Calculate premiums
-            const annualPremium = coverageAmount * riskMultiplier;
-            const monthlyPremium = annualPremium / 12;
-
-            // Display results
-            document.getElementById('monthlyPremium').textContent = `$${monthlyPremium.toFixed(2)}`;
-            document.getElementById('annualPremium').textContent = `$${annualPremium.toFixed(2)}`;
-            document.getElementById('totalCoverage').textContent = `$${coverageAmount}`;
-
-            // Show results section
-            document.getElementById('quoteResults').style.display = 'block';
+        function generateErrorReference() {
+            return Math.random().toString(36).substring(2, 8).toUpperCase();
         }
+
+        function formatDateTime() {
+            return new Date().toLocaleString();
+        }
+
+        function showError() {
+            document.getElementById('errorRef').textContent = generateErrorReference();
+            document.getElementById('errorTime').textContent = formatDateTime();
+            document.getElementById('errorMessage').style.display = 'block';
+            
+            // Hide results if they were showing
+            document.getElementById('quoteResults').style.display = 'none';
+            
+            // Optionally scroll to error message
+            document.getElementById('errorMessage').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function calculateQuote() {
+            try {
+                // Simulate a random error (50% chance)
+                if (Math.random() < 0.5) {
+                    throw new Error("Simulated system error");
+                }
+
+                const coverageAmount = document.getElementById('coverageAmount').value;
+                const riskLevel = document.getElementById('riskLevel').value;
+                const term = document.getElementById('term').value;
+
+                // Validate inputs
+                if (!coverageAmount || !riskLevel || !term) {
+                    throw new Error("Missing required fields");
+                }
+
+                let riskMultiplier;
+                switch(riskLevel) {
+                    case 'low':
+                        riskMultiplier = 0.01;
+                        break;
+                    case 'medium':
+                        riskMultiplier = 0.015;
+                        break;
+                    case 'high':
+                        riskMultiplier = 0.02;
+                        break;
+                    default:
+                        throw new Error("Invalid risk level");
+                }
+
+                // Calculate premiums
+                const annualPremium = coverageAmount * riskMultiplier;
+                const monthlyPremium = annualPremium / 12;
+
+                // Display results
+                document.getElementById('monthlyPremium').textContent = `$${monthlyPremium.toFixed(2)}`;
+                document.getElementById('annualPremium').textContent = `$${annualPremium.toFixed(2)}`;
+                document.getElementById('totalCoverage').textContent = `$${coverageAmount}`;
+
+                // Show results section
+                document.getElementById('quoteResults').style.display = 'block';
+                document.getElementById('errorMessage').style.display = 'none';
+
+            } catch (error) {
+                console.error('Error calculating quote:', error);
+                showError();
+            }
+        }
+
+        // Add event listener for form submission
+        document.getElementById('quoteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculateQuote();
+        });
     </script>
 </body>
 </html>
