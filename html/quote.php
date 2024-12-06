@@ -170,7 +170,7 @@
     <nav class="nav-bar">
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="quote-tool.html">Quote Tool</a></li>
+            <li><a href="quote.php">Quote Tool</a></li>
             <li><a href="#">Claims</a></li>
             <li><a href="#">Customers</a></li>
             <li><a href="#">Reports</a></li>
