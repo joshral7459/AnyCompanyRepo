@@ -6,7 +6,7 @@ FROM 841162696521.dkr.ecr.us-east-1.amazonaws.com/apachephp:latest
 # RUN docker-php-ext-install mysqli
 
 # Copy the application files to the container
-COPY src/ /var/www/html/
+COPY html/ /var/www/html/
 
 # Set the working directory
 WORKDIR /var/www/html
