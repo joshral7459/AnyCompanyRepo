@@ -1,8 +1,22 @@
-# Use the official NGINX base image
-FROM 841162696521.dkr.ecr.us-east-1.amazonaws.com/nginx:alpine
-# Variables defined in buildspec.yml
-COPY ./html /usr/share/nginx/html
-# Expose port 80 for the web server
+# Use the official PHP image with Apache
+FROM php:7.4-apache
+
+# Install any PHP extensions you might need
+# For example, to install mysqli:
+# RUN docker-php-ext-install mysqli
+
+# Copy the application files to the container
+COPY src/ /var/www/html/
+
+# Set the working directory
+WORKDIR /var/www/html
+
+# Apache configuration (if needed)
+# For example, to enable .htaccess files:
+# RUN a2enmod rewrite
+
+# Expose port 80
 EXPOSE 80
-# Start NGINX server
-CMD ["nginx", "-g", "daemon off;"]
+
+# Start Apache in the foreground
+CMD ["apache2-foreground"]
