@@ -1,5 +1,9 @@
 FROM 841162696521.dkr.ecr.us-east-1.amazonaws.com/apachephp:latest
 
+# Set Apache run user and group
+ENV APACHE_RUN_USER=www-data
+ENV APACHE_RUN_GROUP=www-data
+
 RUN echo "Base image loaded successfully" > /var/www/html/debug.txt
 
 # Check PHP version
