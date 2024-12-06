@@ -1,25 +1,20 @@
-# Use the official PHP image with Apache from ECR
 FROM 841162696521.dkr.ecr.us-east-1.amazonaws.com/apachephp:latest
 
-# Install any PHP extensions you might need
-# For example, to install mysqli:
-# RUN docker-php-ext-install mysqli
+RUN echo "Base image loaded successfully" > /var/www/html/debug.txt
 
-# Copy the application files to the container
 COPY html/ /var/www/html/
+RUN echo "Files copied successfully" >> /var/www/html/debug.txt
 
 RUN echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
+RUN echo "phpinfo.php created successfully" >> /var/www/html/debug.txt
 
+RUN echo "<?php echo 'PHP is working!'; ?>" > /var/www/html/test.php
+RUN echo "test.php created successfully" >> /var/www/html/debug.txt
 
-# Set the working directory
 WORKDIR /var/www/html
 
-# Apache configuration (if needed)
-# For example, to enable .htaccess files:
-# RUN a2enmod rewrite
+RUN ls -la /var/www/html >> /var/www/html/debug.txt
 
-# Expose port 80
 EXPOSE 80
 
-# Start Apache in the foreground
 CMD ["apache2-foreground"]
