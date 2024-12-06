@@ -8,6 +8,9 @@ FROM 841162696521.dkr.ecr.us-east-1.amazonaws.com/apachephp:latest
 # Copy the application files to the container
 COPY html/ /var/www/html/
 
+RUN echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
+
+
 # Set the working directory
 WORKDIR /var/www/html
 
