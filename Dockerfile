@@ -4,7 +4,8 @@ RUN echo "Base image loaded successfully" > /var/www/html/debug.txt
 
 COPY html/ /var/www/html/
 RUN echo "Files copied successfully" >> /var/www/html/debug.txt
-RUN a2enmod php7.4
+RUN php -v
+
 RUN echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
 RUN echo "phpinfo.php created successfully" >> /var/www/html/debug.txt
 
