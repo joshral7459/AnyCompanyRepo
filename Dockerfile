@@ -5,14 +5,11 @@ RUN echo "Base image loaded successfully" > /var/www/html/debug.txt
 # Check PHP version
 RUN php -v
 
-# Install Apache PHP module if not present
-RUN apt-get update && apt-get install -y libapache2-mod-php7.4
-
 # List available PHP modules
 RUN ls /etc/apache2/mods-available | grep php
 
-# Enable PHP module
-RUN a2enmod php7.4 || a2enmod php
+# Enable PHP module using the correct name
+RUN a2enmod php7
 
 # Verify Apache PHP module
 RUN apache2ctl -M | grep php
