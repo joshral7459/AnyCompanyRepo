@@ -21,7 +21,7 @@ function getAvailabilityZone() {
         return 'Not available';
     }
 }
-function getTargetGroups() {
+function getTargetGroup() {
     try {
         putenv('AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true');
         $client = new EcsClient([
@@ -32,13 +32,13 @@ function getTargetGroups() {
         // Get the cluster name from an environment variable
         $clusterName = getenv('ECS_CLUSTER_NAME');
         if (!$clusterName) {
-            return ['Lo-Capacity' => 'Cluster name not available', 'Hi-Capacity' => 'Cluster name not available'];
+            return 'Cluster name not available';
         }
 
         // Get the task ARN from the task metadata
         $taskArn = getTaskArn();
         if (!$taskArn) {
-            return ['Lo-Capacity' => 'Task ARN not available', 'Hi-Capacity' => 'Task ARN not available'];
+            return 'Task ARN not available';
         }
 
         // Describe the task
@@ -46,8 +46,6 @@ function getTargetGroups() {
             'cluster' => $clusterName,
             'tasks' => [$taskArn]
         ]);
-
-        $targetGroups = ['Lo-Capacity' => 'Not found', 'Hi-Capacity' => 'Not found'];
 
         if (isset($task['tasks'][0]['group'])) {
             $serviceArn = $task['tasks'][0]['group'];
@@ -65,10 +63,8 @@ function getTargetGroups() {
                             $fullArn = $loadBalancer['targetGroupArn'];
                             if (preg_match('/targetgroup\/([^\/]+)/', $fullArn, $matches)) {
                                 $tgName = $matches[1];
-                                if (strpos($tgName, 'Lo-Capacity') !== false) {
-                                    $targetGroups['Lo-Capacity'] = $tgName;
-                                } elseif (strpos($tgName, 'Hi-Capacity') !== false) {
-                                    $targetGroups['Hi-Capacity'] = $tgName;
+                                if (strpos($tgName, 'Lo-Capacity') !== false || strpos($tgName, 'Hi-Capacity') !== false) {
+                                    return $tgName;
                                 }
                             }
                         }
@@ -78,11 +74,12 @@ function getTargetGroups() {
         }
     } catch (AwsException $e) {
         error_log($e->getMessage());
-        return ['Lo-Capacity' => 'Error: ' . $e->getMessage(), 'Hi-Capacity' => 'Error: ' . $e->getMessage()];
+        return 'Error: ' . $e->getMessage();
     }
 
-    return $targetGroups;
+    return 'Target Group not available';
 }
+
 function getTaskArn() {
     $metadataUri = getenv('ECS_CONTAINER_METADATA_URI_V4');
     if (!$metadataUri) {
