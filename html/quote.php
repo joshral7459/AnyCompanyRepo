@@ -21,7 +21,7 @@ function getAvailabilityZone() {
         return 'Not available';
     }
 }
-function getTargetGroup() {
+function getTargetGroups() {
     try {
         putenv('AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true');
         $client = new EcsClient([
@@ -32,13 +32,13 @@ function getTargetGroup() {
         // Get the cluster name from an environment variable
         $clusterName = getenv('ECS_CLUSTER_NAME');
         if (!$clusterName) {
-            return 'Cluster name not available';
+            return ['Lo-Capacity' => 'Cluster name not available', 'Hi-Capacity' => 'Cluster name not available'];
         }
 
         // Get the task ARN from the task metadata
         $taskArn = getTaskArn();
         if (!$taskArn) {
-            return 'Task ARN not available';
+            return ['Lo-Capacity' => 'Task ARN not available', 'Hi-Capacity' => 'Task ARN not available'];
         }
 
         // Describe the task
@@ -46,6 +46,8 @@ function getTargetGroup() {
             'cluster' => $clusterName,
             'tasks' => [$taskArn]
         ]);
+
+        $targetGroups = ['Lo-Capacity' => 'Not found', 'Hi-Capacity' => 'Not found'];
 
         if (isset($task['tasks'][0]['group'])) {
             $serviceArn = $task['tasks'][0]['group'];
@@ -57,22 +59,29 @@ function getTargetGroup() {
                     'services' => [$serviceName]
                 ]);
 
-                if (isset($service['services'][0]['loadBalancers'][0]['targetGroupArn'])) {
-                    $fullArn = $service['services'][0]['loadBalancers'][0]['targetGroupArn'];
-                    // Extract the target group name from the ARN
-                    if (preg_match('/targetgroup\/([^\/]+)/', $fullArn, $matches)) {
-                        return $matches[1]; // This will return "Lo-Capacity"
+                if (isset($service['services'][0]['loadBalancers'])) {
+                    foreach ($service['services'][0]['loadBalancers'] as $loadBalancer) {
+                        if (isset($loadBalancer['targetGroupArn'])) {
+                            $fullArn = $loadBalancer['targetGroupArn'];
+                            if (preg_match('/targetgroup\/([^\/]+)/', $fullArn, $matches)) {
+                                $tgName = $matches[1];
+                                if (strpos($tgName, 'Lo-Capacity') !== false) {
+                                    $targetGroups['Lo-Capacity'] = $tgName;
+                                } elseif (strpos($tgName, 'Hi-Capacity') !== false) {
+                                    $targetGroups['Hi-Capacity'] = $tgName;
+                                }
+                            }
+                        }
                     }
-                    return $fullArn; // Return full ARN if pattern doesn't match
                 }
             }
         }
     } catch (AwsException $e) {
         error_log($e->getMessage());
-        return 'Error: ' . $e->getMessage();
+        return ['Lo-Capacity' => 'Error: ' . $e->getMessage(), 'Hi-Capacity' => 'Error: ' . $e->getMessage()];
     }
 
-    return 'Target Group not available';
+    return $targetGroups;
 }
 function getTaskArn() {
     $metadataUri = getenv('ECS_CONTAINER_METADATA_URI_V4');
@@ -286,8 +295,12 @@ function getTaskArn() {
             <span class="info-value"><?php echo getAvailabilityZone(); ?></span>
         </div>
         <div class="info-item">
-            <span class="info-label">Target Group:</span>
-            <span class="info-value"><?php echo getTargetGroup(); ?></span>
+            <span class="info-label">Lo-Capacity Target Group:</span>
+            <span class="info-value"><?php echo $targetGroups['Lo-Capacity']; ?></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Hi-Capacity Target Group:</span>
+            <span class="info-value"><?php echo $targetGroups['Hi-Capacity']; ?></span>
         </div>
     </div>
 
