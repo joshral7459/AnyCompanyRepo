@@ -4,36 +4,24 @@ require '/var/www/html/vendor/autoload.php';
 use Aws\Ecs\EcsClient;
 use Aws\Exception\AwsException;
 
+<?php
 function getAvailabilityZone() {
-    $debug = [];
-    $cluster = getenv('ECS_CLUSTER_NAME');
-    $taskArn = getenv('ECS_CONTAINER_METADATA_URI_V4');
-
-    $debug[] = "Cluster: $cluster";
-    $debug[] = "Metadata URI: $taskArn";
-
-    if (!$cluster || !$taskArn) {
-        return ['result' => 'Cluster or Metadata URI not available', 'debug' => $debug];
+    $metadataUri = getenv('ECS_CONTAINER_METADATA_URI_V4');
+    if (!$metadataUri) {
+        return 'Not available';
     }
 
     try {
-        $metadata = @file_get_contents($taskArn . '/task');
+        $metadata = @file_get_contents($metadataUri . '/task');
         if ($metadata === false) {
-            return ['result' => 'Failed to retrieve task metadata', 'debug' => $debug];
+            return 'Not available';
         }
         $metadataArray = json_decode($metadata, true);
-        $debug[] = "Task Metadata: " . print_r($metadataArray, true);
-
-        if (isset($metadataArray['AvailabilityZone'])) {
-            return ['result' => $metadataArray['AvailabilityZone'], 'debug' => $debug];
-        } else {
-            return ['result' => 'AZ not found in task metadata', 'debug' => $debug];
-        }
+        return $metadataArray['AvailabilityZone'] ?? 'Not available';
     } catch (Exception $e) {
-        return ['result' => 'Error: ' . $e->getMessage(), 'debug' => $debug];
+        return 'Not available';
     }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -212,23 +200,16 @@ function getAvailabilityZone() {
     </nav>
 
     <div class="container">
-        <?php
-        $azInfo = getAvailabilityZone();
-        ?>
         <div class="container-info" style="background-color: #f8f9fa; padding: 10px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #ddd;">
-            <h2>Container Information</h2>
-            <div style="margin: 5px 0; font-family: monospace;">
-                IP Address: <?php echo $_SERVER['SERVER_ADDR']; ?>
-            </div>
-            <div style="margin: 5px 0; font-family: monospace;">
-                Availability Zone: <?php echo $azInfo['result']; ?>
-            </div>
-            <div style="margin-top: 10px; padding: 10px; background-color: #e9ecef; border-radius: 4px;">
-                <h3>Debug Information:</h3>
-                <pre><?php echo implode("\n", $azInfo['debug']); ?></pre>
-            </div>
+    <h2>Container Information</h2>
+    <div style="margin: 5px 0; font-family: monospace;">
+        IP Address: <?php echo $_SERVER['SERVER_ADDR']; ?>
+    </div>
+    <div style="margin: 5px 0; font-family: monospace;">
+        Availability Zone: <?php echo getAvailabilityZone(); ?>
         </div>
-        
+    </div>
+        </div>
         <form id="quoteForm">
             <div class="form-section">
                 <h2>Customer Information</h2>
