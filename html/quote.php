@@ -24,32 +24,47 @@ function getAvailabilityZone() {
 
 function getTargetGroup() {
     try {
+        putenv('AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true');
         $client = new EcsClient([
             'version' => 'latest',
-            'region'  => 'us-east-1'  // Replace this with your actual region
+            'region'  => 'us-east-1'
         ]);
 
+        $containerInstanceArn = getenv('ECS_CONTAINER_INSTANCE_ARN');
+        if (!$containerInstanceArn) {
+            return 'Container Instance ARN not available';
+        }
+
         $result = $client->listTasks([
-            'cluster' => 'anycompany-cluster', // Replace with your actual cluster name
-            'containerInstance' => getenv('ECS_CONTAINER_INSTANCE_ARN')
+            'cluster' => 'anycompany-cluster'
+            // Remove the containerInstance parameter
         ]);
 
         if (count($result['taskArns']) > 0) {
             $taskArn = $result['taskArns'][0];
-            $task = $client->describeServices([
-                'cluster' => 'anycompany-cluster', // Replace with your actual cluster name
-                'services' => [$taskArn]
+            $task = $client->describeTasks([
+                'cluster' => 'anycompany-cluster',
+                'tasks' => [$taskArn]
             ]);
 
-            if (isset($task['services'][0]['loadBalancers'][0]['targetGroupArn'])) {
-                return $task['services'][0]['loadBalancers'][0]['targetGroupArn'];
+            if (isset($task['tasks'][0]['group'])) {
+                $serviceArn = $task['tasks'][0]['group'];
+                $service = $client->describeServices([
+                    'cluster' => 'anycompany-cluster',
+                    'services' => [$serviceArn]
+                ]);
+
+                if (isset($service['services'][0]['loadBalancers'][0]['targetGroupArn'])) {
+                    return $service['services'][0]['loadBalancers'][0]['targetGroupArn'];
+                }
             }
         }
     } catch (AwsException $e) {
         error_log($e->getMessage());
+        return 'Error: ' . $e->getMessage();
     }
 
-    return 'Not available';
+    return 'Target Group not available';
 }
 ?>
 <!DOCTYPE html>
