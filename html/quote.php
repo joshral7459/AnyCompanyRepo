@@ -247,6 +247,10 @@ function getTaskArn() {
         .nav-bar a:hover {
             background-color: #1a4567;
         }
+        .info-value {
+            color: blue;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -268,20 +272,20 @@ function getTaskArn() {
         </ul>
     </nav>
 
-    <div class="container">
+<div class="container">
     <div class="container-info">
         <h2>Container Information</h2>
         <div class="info-item">
             <span class="info-label">IP Address:</span>
-            <span><?php echo $_SERVER['SERVER_ADDR']; ?></span>
+            <span class="info-value"><?php echo $_SERVER['SERVER_ADDR']; ?></span>
         </div>
         <div class="info-item">
             <span class="info-label">Availability Zone:</span>
-            <span><?php echo getAvailabilityZone(); ?></span>
+            <span class="info-value"><?php echo getAvailabilityZone(); ?></span>
         </div>
         <div class="info-item">
             <span class="info-label">Target Group:</span>
-            <span><?php echo getTargetGroup(); ?></span>
+            <span class="info-value"><?php echo getTargetGroup(); ?></span>
         </div>
     </div>
 
