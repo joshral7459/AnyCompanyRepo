@@ -58,7 +58,10 @@ function getTargetGroup() {
                 ]);
 
                 if (isset($service['services'][0]['loadBalancers'][0]['targetGroupArn'])) {
-                    return $service['services'][0]['loadBalancers'][0]['targetGroupArn'];
+                    $fullArn = $service['services'][0]['loadBalancers'][0]['targetGroupArn'];
+                    // Extract the target group name from the ARN
+                    $parts = explode('/', $fullArn);
+                    return end($parts); // This will return just the target group name
                 }
             }
         }
