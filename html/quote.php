@@ -27,31 +27,35 @@ function getTargetGroup() {
         putenv('AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true');
         $client = new EcsClient([
             'version' => 'latest',
-            'region'  => 'us-east-1'
+            'region'  => 'us-east-1'  // Make sure this matches your region
         ]);
 
-        $containerInstanceArn = getenv('ECS_CONTAINER_INSTANCE_ARN');
-        if (!$containerInstanceArn) {
-            return 'Container Instance ARN not available';
+        // Get the cluster name from an environment variable
+        $clusterName = getenv('ECS_CLUSTER_NAME');
+        if (!$clusterName) {
+            return 'Cluster name not available';
         }
 
-        $result = $client->listTasks([
-            'cluster' => 'anycompany-cluster'
-            // Remove the containerInstance parameter
+        // Get the task ARN from the task metadata
+        $taskArn = $this->getTaskArn();
+        if (!$taskArn) {
+            return 'Task ARN not available';
+        }
+
+        // Describe the task
+        $task = $client->describeTasks([
+            'cluster' => $clusterName,
+            'tasks' => [$taskArn]
         ]);
 
-        if (count($result['taskArns']) > 0) {
-            $taskArn = $result['taskArns'][0];
-            $task = $client->describeTasks([
-                'cluster' => 'anycompany-cluster',
-                'tasks' => [$taskArn]
-            ]);
-
-            if (isset($task['tasks'][0]['group'])) {
-                $serviceArn = $task['tasks'][0]['group'];
+        if (isset($task['tasks'][0]['group'])) {
+            $serviceArn = $task['tasks'][0]['group'];
+            // If the group starts with "service:", it's a service name
+            if (strpos($serviceArn, 'service:') === 0) {
+                $serviceName = substr($serviceArn, 8);
                 $service = $client->describeServices([
-                    'cluster' => 'anycompany-cluster',
-                    'services' => [$serviceArn]
+                    'cluster' => $clusterName,
+                    'services' => [$serviceName]
                 ]);
 
                 if (isset($service['services'][0]['loadBalancers'][0]['targetGroupArn'])) {
@@ -66,7 +70,25 @@ function getTargetGroup() {
 
     return 'Target Group not available';
 }
-?>
+
+function getTaskArn() {
+    $metadataUri = getenv('ECS_CONTAINER_METADATA_URI_V4');
+    if (!$metadataUri) {
+        return null;
+    }
+
+    try {
+        $metadata = @file_get_contents($metadataUri . '/task');
+        if ($metadata === false) {
+            return null;
+        }
+        $metadataArray = json_decode($metadata, true);
+        return $metadataArray['TaskARN'] ?? null;
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        return null;
+    }
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
