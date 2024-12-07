@@ -1,10 +1,4 @@
 <?php
-require '/var/www/html/vendor/autoload.php';
-
-use Aws\Ecs\EcsClient;
-use Aws\Exception\AwsException;
-
-<?php
 function getAvailabilityZone() {
     $metadataUri = getenv('ECS_CONTAINER_METADATA_URI_V4');
     if (!$metadataUri) {
