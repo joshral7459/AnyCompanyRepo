@@ -292,12 +292,8 @@ function getTaskArn() {
             <span class="info-value"><?php echo getAvailabilityZone(); ?></span>
         </div>
         <div class="info-item">
-            <span class="info-label">Lo-Capacity Target Group:</span>
-            <span class="info-value"><?php echo $targetGroups['Lo-Capacity']; ?></span>
-        </div>
-        <div class="info-item">
-            <span class="info-label">Hi-Capacity Target Group:</span>
-            <span class="info-value"><?php echo $targetGroups['Hi-Capacity']; ?></span>
+            <span class="info-label">Target Group:</span>
+            <span class="info-value"><?php echo getTargetGroup(); ?></span>
         </div>
     </div>
 
