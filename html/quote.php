@@ -200,16 +200,18 @@ function getAvailabilityZone() {
     </nav>
 
     <div class="container">
-        <div class="container-info" style="background-color: #f8f9fa; padding: 10px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #ddd;">
-    <h2>Container Information</h2>
-    <div style="margin: 5px 0; font-family: monospace;">
-        IP Address: <?php echo $_SERVER['SERVER_ADDR']; ?>
-    </div>
-    <div style="margin: 5px 0; font-family: monospace;">
-        Availability Zone: <?php echo getAvailabilityZone(); ?>
+        <div class="container-info">
+            <h2>Container Information</h2>
+            <div class="info-item">
+                <span class="info-label">IP Address:</span>
+                <span><?php echo $_SERVER['SERVER_ADDR']; ?></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Availability Zone:</span>
+                <span><?php echo getAvailabilityZone(); ?></span>
+            </div>
         </div>
     </div>
-        </div>
         <form id="quoteForm">
             <div class="form-section">
                 <h2>Customer Information</h2>
