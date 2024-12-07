@@ -21,7 +21,6 @@ function getAvailabilityZone() {
         return 'Not available';
     }
 }
-
 function getTargetGroup() {
     try {
         putenv('AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true');
@@ -37,7 +36,7 @@ function getTargetGroup() {
         }
 
         // Get the task ARN from the task metadata
-        $taskArn = $this->getTaskArn();
+        $taskArn = getTaskArn();
         if (!$taskArn) {
             return 'Task ARN not available';
         }
@@ -70,7 +69,6 @@ function getTargetGroup() {
 
     return 'Target Group not available';
 }
-
 function getTaskArn() {
     $metadataUri = getenv('ECS_CONTAINER_METADATA_URI_V4');
     if (!$metadataUri) {
@@ -89,13 +87,15 @@ function getTaskArn() {
         return null;
     }
 }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AnyCompany Insurance Quote Tool</title>
-     <style>
+    <style>
         /* Base styles */
         * {
             box-sizing: border-box;
@@ -266,25 +266,23 @@ function getTaskArn() {
     </nav>
 
     <div class="container">
-        <div class="container-info">
-            <h2>Container Information</h2>
-            <div class="info-item">
-                <span class="info-label">IP Address:</span>
-                <span><?php echo $_SERVER['SERVER_ADDR']; ?></span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Availability Zone:</span>
-                <span><?php echo getAvailabilityZone(); ?></span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Target Group:</span>
-                <span><?php echo getTargetGroup(); ?></span>
-            </div>
+    <div class="container-info">
+        <h2>Container Information</h2>
+        <div class="info-item">
+            <span class="info-label">IP Address:</span>
+            <span><?php echo $_SERVER['SERVER_ADDR']; ?></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Availability Zone:</span>
+            <span><?php echo getAvailabilityZone(); ?></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Target Group:</span>
+            <span><?php echo getTargetGroup(); ?></span>
         </div>
     </div>
-    
-    </div>
-        <form id="quoteForm">
+
+    <form id="quoteForm">
             <div class="form-section">
                 <h2>Customer Information</h2>
                 <div class="form-group">
@@ -351,7 +349,7 @@ function getTaskArn() {
             </div>
         </form>
 
-        <div id="quoteResults">
+    <div id="quoteResults">
             <h2>Quote Summary</h2>
             <div class="result-row">
                 <span>Monthly Premium:</span>
@@ -367,6 +365,7 @@ function getTaskArn() {
             </div>
         </div>
     </div>
+
 
 <script>
     function calculateQuote() {
