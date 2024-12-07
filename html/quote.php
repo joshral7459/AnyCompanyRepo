@@ -60,8 +60,10 @@ function getTargetGroup() {
                 if (isset($service['services'][0]['loadBalancers'][0]['targetGroupArn'])) {
                     $fullArn = $service['services'][0]['loadBalancers'][0]['targetGroupArn'];
                     // Extract the target group name from the ARN
-                    $parts = explode('/', $fullArn);
-                    return end($parts); // This will return just the target group name
+                    if (preg_match('/targetgroup\/([^\/]+)/', $fullArn, $matches)) {
+                        return $matches[1]; // This will return "Lo-Capacity"
+                    }
+                    return $fullArn; // Return full ARN if pattern doesn't match
                 }
             }
         }
