@@ -8,19 +8,26 @@ function getAvailabilityZone() {
     $cluster = getenv('ECS_CLUSTER_NAME');
     $taskArn = getenv('ECS_TASK_ARN');
 
+    echo "Cluster: $cluster<br>";
+    echo "Task ARN: $taskArn<br>";
+
     if (!$cluster || !$taskArn) {
         return 'Cluster or Task ARN not available';
     }
 
-    $client = new EcsClient([
+    // Extract just the task ID from the full ARN
+    $taskId = substr($taskArn, strrpos($taskArn, '/') + 1);
+    echo "Extracted Task ID: $taskId<br>";
+
+    $client = new Aws\Ecs\EcsClient([
         'version' => 'latest',
-        'region'  => getenv('AWS_DEFAULT_REGION') ?: 'us-east-1', // replace with your region if different
+        'region'  => getenv('AWS_DEFAULT_REGION') ?: 'us-east-1',
     ]);
 
     try {
         $result = $client->describeTasks([
             'cluster' => $cluster,
-            'tasks' => [$taskArn]
+            'tasks' => [$taskId]
         ]);
 
         if (isset($result['tasks'][0]['availabilityZone'])) {
@@ -28,7 +35,7 @@ function getAvailabilityZone() {
         } else {
             return 'AZ not found in task description';
         }
-    } catch (AwsException $e) {
+    } catch (Aws\Exception\AwsException $e) {
         return 'Error: ' . $e->getMessage();
     }
 }
