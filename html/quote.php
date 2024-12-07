@@ -30,14 +30,14 @@ function getTargetGroup() {
         ]);
 
         $result = $client->listTasks([
-            'cluster' => 'your-cluster-name',  // replace with your cluster name
+            'cluster' => anycompany-cluster',  // replace with your cluster name
             'containerInstance' => getenv('ECS_CONTAINER_INSTANCE_ARN')
         ]);
 
         if (count($result['taskArns']) > 0) {
             $taskArn = $result['taskArns'][0];
             $task = $client->describeServices([
-                'cluster' => 'your-cluster-name',  // replace with your cluster name
+                'cluster' => 'anycompany-cluster',  // replace with your cluster name
                 'services' => [$taskArn]
             ]);
 
