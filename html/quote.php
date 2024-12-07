@@ -1,4 +1,9 @@
 <?php
+require '/var/www/html/vendor/autoload.php';
+
+use Aws\Ecs\EcsClient;
+use Aws\Exception\AwsException;
+
 function getAvailabilityZone() {
     $metadataUri = getenv('ECS_CONTAINER_METADATA_URI_V4');
     if (!$metadataUri) {
@@ -15,6 +20,36 @@ function getAvailabilityZone() {
     } catch (Exception $e) {
         return 'Not available';
     }
+}
+
+function getTargetGroup() {
+    try {
+        $client = new EcsClient([
+            'version' => 'latest',
+            'region'  => 'us-east-1'  // replace with your region
+        ]);
+
+        $result = $client->listTasks([
+            'cluster' => 'your-cluster-name',  // replace with your cluster name
+            'containerInstance' => getenv('ECS_CONTAINER_INSTANCE_ARN')
+        ]);
+
+        if (count($result['taskArns']) > 0) {
+            $taskArn = $result['taskArns'][0];
+            $task = $client->describeServices([
+                'cluster' => 'your-cluster-name',  // replace with your cluster name
+                'services' => [$taskArn]
+            ]);
+
+            if (isset($task['services'][0]['loadBalancers'][0]['targetGroupArn'])) {
+                return $task['services'][0]['loadBalancers'][0]['targetGroupArn'];
+            }
+        }
+    } catch (AwsException $e) {
+        error_log($e->getMessage());
+    }
+
+    return 'Not available';
 }
 ?>
 <!DOCTYPE html>
@@ -204,7 +239,13 @@ function getAvailabilityZone() {
                 <span class="info-label">Availability Zone:</span>
                 <span><?php echo getAvailabilityZone(); ?></span>
             </div>
+            <div class="info-item">
+                <span class="info-label">Target Group:</span>
+                <span><?php echo getTargetGroup(); ?></span>
+            </div>
         </div>
+    </div>
+    
     </div>
         <form id="quoteForm">
             <div class="form-section">
