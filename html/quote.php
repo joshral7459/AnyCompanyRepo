@@ -1,10 +1,45 @@
+<?php
+require '/var/www/html/vendor/autoload.php';
+
+use Aws\Ecs\EcsClient;
+use Aws\Exception\AwsException;
+
+function getAvailabilityZone() {
+    $cluster = getenv('ECS_CLUSTER_NAME');
+    $taskArn = getenv('ECS_TASK_ARN');
+
+    if (!$cluster || !$taskArn) {
+        return 'Cluster or Task ARN not available';
+    }
+
+    $client = new EcsClient([
+        'version' => 'latest',
+        'region'  => getenv('AWS_DEFAULT_REGION') ?: 'us-east-1', // replace with your region if different
+    ]);
+
+    try {
+        $result = $client->describeTasks([
+            'cluster' => $cluster,
+            'tasks' => [$taskArn]
+        ]);
+
+        if (isset($result['tasks'][0]['availabilityZone'])) {
+            return $result['tasks'][0]['availabilityZone'];
+        } else {
+            return 'AZ not found in task description';
+        }
+    } catch (AwsException $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AnyCompany Insurance Quote Tool</title>
-    <style>
+     <style>
         /* Base styles */
         * {
             box-sizing: border-box;
@@ -156,17 +191,14 @@
     </style>
 </head>
 <body>
-    <!-- Single instance of user-info -->
     <div class="user-info">
         Welcome, Employee | ID: EMP123 | <a href="#" style="color: white;">Logout</a>
     </div>
 
-    <!-- Single instance of header -->
     <div class="header">
         <h1>AnyCompany Insurance Quote Tool</h1>
     </div>
 
-    <!-- Navigation -->
     <nav class="nav-bar">
         <ul>
             <li><a href="index.html">Home</a></li>
@@ -177,7 +209,6 @@
         </ul>
     </nav>
 
-    <!-- Main container with container info -->
     <div class="container">
         <div class="container-info" style="background-color: #f8f9fa; padding: 10px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #ddd;">
             <h2>Container Information</h2>
@@ -185,11 +216,10 @@
                 IP Address: <?php echo $_SERVER['SERVER_ADDR']; ?>
             </div>
             <div style="margin: 5px 0; font-family: monospace;">
-                Availability Zone: <?php echo getenv('AWS_AVAILABILITY_ZONE') ?: 'Not available'; ?>
+                Availability Zone: <?php echo getAvailabilityZone(); ?>
             </div>
         </div>
 
-        <!-- Your existing form and quote results -->
         <form id="quoteForm">
             <div class="form-section">
                 <h2>Customer Information</h2>
