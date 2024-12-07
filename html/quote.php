@@ -185,7 +185,7 @@
                 IP Address: <?php echo $_SERVER['SERVER_ADDR']; ?>
             </div>
             <div style="margin: 5px 0; font-family: monospace;">
-                Hostname: <?php echo gethostname(); ?>
+                Availability Zone: <?php echo getenv('AWS_AVAILABILITY_ZONE') ?: 'Not available'; ?>
             </div>
         </div>
 
