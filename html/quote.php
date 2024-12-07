@@ -5,19 +5,20 @@ use Aws\Ecs\EcsClient;
 use Aws\Exception\AwsException;
 
 function getAvailabilityZone() {
+    $debug = [];
     $cluster = getenv('ECS_CLUSTER_NAME');
     $taskArn = getenv('ECS_TASK_ARN');
 
-    echo "Cluster: $cluster<br>";
-    echo "Task ARN: $taskArn<br>";
+    $debug[] = "Cluster: $cluster";
+    $debug[] = "Task ARN: $taskArn";
 
     if (!$cluster || !$taskArn) {
-        return 'Cluster or Task ARN not available';
+        return ['result' => 'Cluster or Task ARN not available', 'debug' => $debug];
     }
 
     // Extract just the task ID from the full ARN
     $taskId = substr($taskArn, strrpos($taskArn, '/') + 1);
-    echo "Extracted Task ID: $taskId<br>";
+    $debug[] = "Extracted Task ID: $taskId";
 
     $client = new Aws\Ecs\EcsClient([
         'version' => 'latest',
@@ -31,12 +32,12 @@ function getAvailabilityZone() {
         ]);
 
         if (isset($result['tasks'][0]['availabilityZone'])) {
-            return $result['tasks'][0]['availabilityZone'];
+            return ['result' => $result['tasks'][0]['availabilityZone'], 'debug' => $debug];
         } else {
-            return 'AZ not found in task description';
+            return ['result' => 'AZ not found in task description', 'debug' => $debug];
         }
     } catch (Aws\Exception\AwsException $e) {
-        return 'Error: ' . $e->getMessage();
+        return ['result' => 'Error: ' . $e->getMessage(), 'debug' => $debug];
     }
 }
 ?>
@@ -217,16 +218,23 @@ function getAvailabilityZone() {
     </nav>
 
     <div class="container">
+        <?php
+        $azInfo = getAvailabilityZone();
+        ?>
         <div class="container-info" style="background-color: #f8f9fa; padding: 10px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #ddd;">
             <h2>Container Information</h2>
             <div style="margin: 5px 0; font-family: monospace;">
                 IP Address: <?php echo $_SERVER['SERVER_ADDR']; ?>
             </div>
             <div style="margin: 5px 0; font-family: monospace;">
-                Availability Zone: <?php echo getAvailabilityZone(); ?>
+                Availability Zone: <?php echo $azInfo['result']; ?>
+            </div>
+            <div style="margin-top: 10px; padding: 10px; background-color: #e9ecef; border-radius: 4px;">
+                <h3>Debug Information:</h3>
+                <pre><?php echo implode("\n", $azInfo['debug']); ?></pre>
             </div>
         </div>
-
+        
         <form id="quoteForm">
             <div class="form-section">
                 <h2>Customer Information</h2>
