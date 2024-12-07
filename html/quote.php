@@ -7,39 +7,33 @@ use Aws\Exception\AwsException;
 function getAvailabilityZone() {
     $debug = [];
     $cluster = getenv('ECS_CLUSTER_NAME');
-    $taskArn = getenv('ECS_TASK_ARN');
+    $taskArn = getenv('ECS_CONTAINER_METADATA_URI_V4');
 
     $debug[] = "Cluster: $cluster";
-    $debug[] = "Task ARN: $taskArn";
+    $debug[] = "Metadata URI: $taskArn";
 
     if (!$cluster || !$taskArn) {
-        return ['result' => 'Cluster or Task ARN not available', 'debug' => $debug];
+        return ['result' => 'Cluster or Metadata URI not available', 'debug' => $debug];
     }
 
-    // Extract just the task ID from the full ARN
-    $taskId = substr($taskArn, strrpos($taskArn, '/') + 1);
-    $debug[] = "Extracted Task ID: $taskId";
-
-    $client = new Aws\Ecs\EcsClient([
-        'version' => 'latest',
-        'region'  => getenv('AWS_DEFAULT_REGION') ?: 'us-east-1',
-    ]);
-
     try {
-        $result = $client->describeTasks([
-            'cluster' => $cluster,
-            'tasks' => [$taskId]
-        ]);
-
-        if (isset($result['tasks'][0]['availabilityZone'])) {
-            return ['result' => $result['tasks'][0]['availabilityZone'], 'debug' => $debug];
-        } else {
-            return ['result' => 'AZ not found in task description', 'debug' => $debug];
+        $metadata = @file_get_contents($taskArn . '/task');
+        if ($metadata === false) {
+            return ['result' => 'Failed to retrieve task metadata', 'debug' => $debug];
         }
-    } catch (Aws\Exception\AwsException $e) {
+        $metadataArray = json_decode($metadata, true);
+        $debug[] = "Task Metadata: " . print_r($metadataArray, true);
+
+        if (isset($metadataArray['AvailabilityZone'])) {
+            return ['result' => $metadataArray['AvailabilityZone'], 'debug' => $debug];
+        } else {
+            return ['result' => 'AZ not found in task metadata', 'debug' => $debug];
+        }
+    } catch (Exception $e) {
         return ['result' => 'Error: ' . $e->getMessage(), 'debug' => $debug];
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
