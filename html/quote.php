@@ -26,18 +26,18 @@ function getTargetGroup() {
     try {
         $client = new EcsClient([
             'version' => 'latest',
-            'region'  => 'us-east-1'  // replace with your region
+            'region'  => 'us-east-1'  // Replace this with your actual region
         ]);
 
         $result = $client->listTasks([
-            'cluster' => anycompany-cluster',  // replace with your cluster name
+            'cluster' => 'anycompany-cluster', // Replace with your actual cluster name
             'containerInstance' => getenv('ECS_CONTAINER_INSTANCE_ARN')
         ]);
 
         if (count($result['taskArns']) > 0) {
             $taskArn = $result['taskArns'][0];
             $task = $client->describeServices([
-                'cluster' => 'anycompany-cluster',  // replace with your cluster name
+                'cluster' => 'anycompany-cluster', // Replace with your actual cluster name
                 'services' => [$taskArn]
             ]);
 
