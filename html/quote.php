@@ -61,11 +61,10 @@ function getTargetGroup() {
                     foreach ($service['services'][0]['loadBalancers'] as $loadBalancer) {
                         if (isset($loadBalancer['targetGroupArn'])) {
                             $fullArn = $loadBalancer['targetGroupArn'];
-                            if (preg_match('/targetgroup\/([^\/]+)/', $fullArn, $matches)) {
-                                $tgName = $matches[1];
-                                if (strpos($tgName, 'Lo-Capacity') !== false || strpos($tgName, 'Hi-Capacity') !== false) {
-                                    return $tgName;
-                                }
+                            if (strpos($fullArn, 'Lo-Capacity') !== false) {
+                                return 'Lo-Capacity';
+                            } elseif (strpos($fullArn, 'Hi-Capacity') !== false) {
+                                return 'Hi-Capacity';
                             }
                         }
                     }
