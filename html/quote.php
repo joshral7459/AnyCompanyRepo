@@ -31,12 +31,14 @@ function getTargetGroup() {
 
         // Get the cluster name from an environment variable
         $clusterName = getenv('ECS_CLUSTER_NAME');
+        error_log("Cluster Name: " . $clusterName);
         if (!$clusterName) {
             return 'Cluster name not available';
         }
 
         // Get the task ARN from the task metadata
         $taskArn = getTaskArn();
+        error_log("Task ARN: " . $taskArn);
         if (!$taskArn) {
             return 'Task ARN not available';
         }
@@ -47,20 +49,27 @@ function getTargetGroup() {
             'tasks' => [$taskArn]
         ]);
 
+        error_log("Task Description: " . json_encode($task));
+
         if (isset($task['tasks'][0]['group'])) {
             $serviceArn = $task['tasks'][0]['group'];
+            error_log("Service ARN: " . $serviceArn);
             // If the group starts with "service:", it's a service name
             if (strpos($serviceArn, 'service:') === 0) {
                 $serviceName = substr($serviceArn, 8);
+                error_log("Service Name: " . $serviceName);
                 $service = $client->describeServices([
                     'cluster' => $clusterName,
                     'services' => [$serviceName]
                 ]);
 
+                error_log("Service Description: " . json_encode($service));
+
                 if (isset($service['services'][0]['loadBalancers'])) {
                     foreach ($service['services'][0]['loadBalancers'] as $loadBalancer) {
                         if (isset($loadBalancer['targetGroupArn'])) {
                             $fullArn = $loadBalancer['targetGroupArn'];
+                            error_log("Target Group ARN: " . $fullArn);
                             if (strpos($fullArn, 'Lo-Capacity') !== false) {
                                 return 'Lo-Capacity';
                             } elseif (strpos($fullArn, 'Hi-Capacity') !== false) {
@@ -72,7 +81,10 @@ function getTargetGroup() {
             }
         }
     } catch (AwsException $e) {
-        error_log($e->getMessage());
+        error_log("AWS Exception: " . $e->getMessage());
+        return 'Error: ' . $e->getMessage();
+    } catch (Exception $e) {
+        error_log("General Exception: " . $e->getMessage());
         return 'Error: ' . $e->getMessage();
     }
 
