@@ -1,4 +1,5 @@
 <?php
+$capacity = $_GET['capacity'] ?? 'unknown';
 require '/var/www/html/vendor/autoload.php';
 
 use Aws\Ecs\EcsClient;
@@ -22,6 +23,12 @@ function getAvailabilityZone() {
     }
 }
 function getTargetGroup() {
+    global $capacity;
+    if ($capacity === 'lo') {
+        return 'Lo-Capacity';
+    } elseif ($capacity === 'hi') {
+        return 'Hi-Capacity';
+        
     try {
         putenv('AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true');
         $client = new EcsClient([
