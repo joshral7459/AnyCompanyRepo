@@ -125,11 +125,14 @@ function getTaskArn() {
         }
 
         /* Header styles */
-        .header {
+        header {
             background-color: #1a4567;
             color: white;
             padding: 1rem;
-            text-align: center;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
 
         .user-info {
@@ -264,45 +267,53 @@ function getTaskArn() {
             font-weight: bold;
         }
        .container-info {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            background-color: rgba(26, 69, 103, 0.6);  /* Reduced opacity */
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            z-index: 1000;
-            max-width: 300px;
-            font-size: 14px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);  /* Added subtle shadow */
-        }
-        
-        .container-info h2 {
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-        
-        .info-item {
-            margin-bottom: 5px;
-        }
-        
-        .info-label {
-            font-weight: bold;
-        }
-        
-        .info-value {
-            color: #FFD700;  /* Changed to gold color for better visibility */
-            font-weight: normal;
-        }
-        
-        @media (max-width: 768px) {
-            .container-info {
-                font-size: 12px;
-            }
-            .container-info h2 {
-                font-size: 14px;
-            }
-        }
+    background-color: #2a5577;  /* Solid background color */
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 300px;
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.container-info h2 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.info-item {
+    margin-bottom: 5px;
+}
+
+.info-label {
+    font-weight: bold;
+}
+
+.info-value {
+    color: #FFD700;
+    font-weight: normal;
+}
+
+.header-content {
+    flex-grow: 1;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+    }
+
+    .container-info {
+        font-size: 12px;
+        max-width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .container-info h2 {
+        font-size: 14px;
+    }
+}
     </style>
 </head>
 
