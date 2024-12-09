@@ -200,9 +200,9 @@ function getTaskArn() {
         .container-info h2 {
             font-size: 1.1rem;
             margin-bottom: 0.5rem;
-            color: #1a4567;
+            color: white;
         }
-        
+                
         .info-item {
             margin-bottom: 0.3rem;
         }
@@ -332,82 +332,6 @@ function getTaskArn() {
             padding: 5px 0;
             border-bottom: 1px solid #ddd;
         }
-
-        .nav-bar {
-            background-color: #2a5577;
-            padding: 1rem;
-        }
-
-        .nav-bar ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-        }
-
-        .nav-bar a {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-
-        .nav-bar a:hover {
-            background-color: #1a4567;
-        }
-        .info-value {
-            color: blue;
-            font-weight: bold;
-        }
-       .container-info {
-    background-color: #2a5577;  /* Solid background color */
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    max-width: 300px;
-    font-size: 14px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-.container-info h2 {
-    font-size: 16px;
-    margin-bottom: 10px;
-}
-
-.info-item {
-    margin-bottom: 5px;
-}
-
-.info-label {
-    font-weight: bold;
-}
-
-.info-value {
-    color: #FFD700;
-    font-weight: normal;
-}
-
-.header-content {
-    flex-grow: 1;
-    text-align: center;
-}
-
-@media (max-width: 768px) {
-    header {
-        flex-direction: column;
-    }
-
-    .container-info {
-        font-size: 12px;
-        max-width: 100%;
-        margin-bottom: 1rem;
-    }
-
-    .container-info h2 {
-        font-size: 14px;
-    }
-}
     </style>
 </head>
 
@@ -446,8 +370,8 @@ function getTaskArn() {
             <span class="info-value"><?php echo getTargetGroup(); ?></span>
         </div>
     </div>
-
-    <form id="quoteForm">
+    <div class="container">
+        <form id="quoteForm">
             <div class="form-section">
                 <h2>Customer Information</h2>
                 <div class="form-group">
@@ -515,23 +439,21 @@ function getTaskArn() {
         </form>
 
     <div id="quoteResults">
-            <h2>Quote Summary</h2>
-            <div class="result-row">
-                <span>Monthly Premium:</span>
-                <span id="monthlyPremium">$0.00</span>
-            </div>
-            <div class="result-row">
-                <span>Annual Premium:</span>
-                <span id="annualPremium">$0.00</span>
-            </div>
-            <div class="result-row">
-                <span>Total Coverage:</span>
-                <span id="totalCoverage">$0.00</span>
-            </div>
+        <h2>Quote Summary</h2>
+        <div class="result-row">
+            <span>Monthly Premium:</span>
+            <span id="monthlyPremium">$0.00</span>
         </div>
-    </div>
-
-
+        <div class="result-row">
+            <span>Annual Premium:</span>
+            <span id="annualPremium">$0.00</span>
+        </div>
+        <div class="result-row">
+            <span>Total Coverage:</span>
+            <span id="totalCoverage">$0.00</span>
+        </div>
+</div.container>
+    
 <script>
     function calculateQuote() {
         try {
