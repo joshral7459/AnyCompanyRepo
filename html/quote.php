@@ -128,18 +128,112 @@ function getTaskArn() {
         header {
             background-color: #1a4567;
             color: white;
-            padding: 1rem;
-            position: relative;
+            padding: 1rem 2rem;
+        }
+        
+        .header-content {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-
+        
+        h1 {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+        
         .user-info {
+            font-size: 0.9rem;
+        }
+        
+        .logout-link {
+            color: #FFD700;
+            text-decoration: none;
+        }
+        
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Navigation bar styles */
+        .nav-bar {
             background-color: #2a5577;
+            padding: 0.5rem 2rem;
+        }
+        
+        .nav-bar ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0;
+        }
+        
+        .nav-bar a {
             color: white;
-            padding: 0.5rem;
-            text-align: right;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-bar a:hover {
+            background-color: #1a4567;
+        }
+        
+        /* Container info styles */
+        .container-info {
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 1rem;
+            border-radius: 5px;
+            max-width: 1200px;
+            margin: 1rem auto;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .container-info h2 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #1a4567;
+        }
+        
+        .info-item {
+            margin-bottom: 0.3rem;
+        }
+        
+        .info-label {
+            font-weight: bold;
+        }
+        
+        .info-value {
+            color: #2a5577;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        
+            h1 {
+                margin-bottom: 0.5rem;
+            }
+        
+            .nav-bar ul {
+                flex-direction: column;
+                align-items: center;
+            }
+        
+            .nav-bar li {
+                margin-bottom: 0.5rem;
+            }
         }
 
         /* Main container styles */
@@ -319,26 +413,11 @@ function getTaskArn() {
 
 <body>
     <header>
-        <div class="container-info">
-            <h2>Container Information</h2>
-            <div class="info-item">
-                <span class="info-label">IP Address:</span>
-                <span class="info-value"><?php echo $_SERVER['SERVER_ADDR']; ?></span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Availability Zone:</span>
-                <span class="info-value"><?php echo getAvailabilityZone(); ?></span>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Target Group:</span>
-                <span class="info-value"><?php echo getTargetGroup(); ?></span>
-            </div>
-        </div>
         <div class="header-content">
             <h1>AnyCompany Insurance Quote Tool</h1>
-        </div>
-        <div class="user-info">
-            Welcome, Employee | ID: EMP123 | <a href="#" style="color: white;">Logout</a>
+            <div class="user-info">
+                Welcome, Employee | ID: EMP123 | <a href="#" class="logout-link">Logout</a>
+            </div>
         </div>
     </header>
 
@@ -351,6 +430,22 @@ function getTaskArn() {
             <li><a href="#">Reports</a></li>
         </ul>
     </nav>
+
+    <div class="container-info">
+        <h2>Container Information</h2>
+        <div class="info-item">
+            <span class="info-label">IP Address:</span>
+            <span class="info-value"><?php echo $_SERVER['SERVER_ADDR']; ?></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Availability Zone:</span>
+            <span class="info-value"><?php echo getAvailabilityZone(); ?></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Target Group:</span>
+            <span class="info-value"><?php echo getTargetGroup(); ?></span>
+        </div>
+    </div>
 
     <form id="quoteForm">
             <div class="form-section">
