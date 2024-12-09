@@ -1,29 +1,36 @@
 version: 0.2
+
+env:
+  variables:
+    DOCKER_BUILDKIT: "1"
+
 phases:
   pre_build:
     commands:
       - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/anycompany-repo
-      - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - echo "AWS Account ID = $AWS_ACCOUNT_ID"
-      - echo "AWS Region = $AWS_DEFAULT_REGION"
-      - echo "Repository URI = $REPOSITORY_URI"
-      - echo "Image tag = $IMAGE_TAG"
-      - echo "ECS Cluster Name = $ECS_CLUSTER_NAME"  # Added this line
+      - IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/nginx:alpine
+
   build:
     commands:
       - docker build --build-arg AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID --build-arg AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -t $REPOSITORY_URI:$IMAGE_TAG .
+
   post_build:
     commands:
       - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo Creating image definitions file...
       - echo '[{"name":"anycompany-container","imageUri":"'$REPOSITORY_URI:$IMAGE_TAG'"}]' > imageDefinitions.json
-      - echo Updating task definition...
-      - sed -i "s/ECS_CLUSTER_NAME_PLACEHOLDER/$ECS_CLUSTER_NAME/g" task-definition.json  # Added this line
+      - sed -i "s/ECS_CLUSTER_NAME_PLACEHOLDER/$ECS_CLUSTER_NAME/g" task-definition.json
+      - sed -i "s|IMAGE_PLACEHOLDER|$REPOSITORY_URI:$IMAGE_TAG|g" task-definition.json
+
 artifacts:
   files:
     - imageDefinitions.json
-    - task-definition.json  # Added this line
-  name: imagedefinitions
+    - task-definition.json
+  name: build-artifacts-$(date +%Y-%m-%d-%H-%M-%S)
+
+cache:
+  paths:
+    - /root/.docker
+
 
