@@ -263,17 +263,18 @@ function getTaskArn() {
             color: blue;
             font-weight: bold;
         }
-        .container-info {
+       .container-info {
             position: fixed;
             top: 10px;
             left: 10px;
-            background-color: rgba(26, 69, 103, 0.8);
+            background-color: rgba(26, 69, 103, 0.6);  /* Reduced opacity */
             color: white;
             padding: 10px;
             border-radius: 5px;
             z-index: 1000;
             max-width: 300px;
             font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);  /* Added subtle shadow */
         }
         
         .container-info h2 {
@@ -290,7 +291,7 @@ function getTaskArn() {
         }
         
         .info-value {
-            color: #ffffff;
+            color: #FFD700;  /* Changed to gold color for better visibility */
             font-weight: normal;
         }
         
@@ -302,7 +303,6 @@ function getTaskArn() {
                 font-size: 14px;
             }
         }
-
     </style>
 </head>
 
