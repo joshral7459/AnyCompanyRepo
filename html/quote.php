@@ -1,5 +1,4 @@
 <?php
-$capacity = $_GET['capacity'] ?? 'unknown';
 require '/var/www/html/vendor/autoload.php';
 
 use Aws\Ecs\EcsClient;
