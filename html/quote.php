@@ -129,23 +129,25 @@ function getTaskArn() {
             background-color: #1a4567;
             color: white;
             padding: 1rem 2rem;
+            text-align: center; /* Center all content in the header */
         }
         
         .header-content {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center; /* Center items horizontally */
             max-width: 1200px;
             margin: 0 auto;
         }
         
         h1 {
             font-size: 1.8rem;
-            margin: 0;
+            margin: 0 0 1rem 0; /* Add some bottom margin */
         }
         
         .user-info {
             font-size: 0.9rem;
+            align-self: flex-end; /* Align to the right */
         }
         
         .logout-link {
@@ -199,6 +201,7 @@ function getTaskArn() {
             z-index: 1000;
             width: auto;
             white-space: nowrap;
+            display: inline-block; /* This should remove any extra space */
         }
         
         .container-info h2 {
