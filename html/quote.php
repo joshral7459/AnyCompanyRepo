@@ -307,29 +307,29 @@ function getTaskArn() {
 </head>
 
 <body>
-    <div class="container-info">
-        <h2>Container Information</h2>
-        <div class="info-item">
-            <span class="info-label">IP Address:</span>
-            <span class="info-value"><?php echo $_SERVER['SERVER_ADDR']; ?></span>
+    <header>
+        <div class="container-info">
+            <h2>Container Information</h2>
+            <div class="info-item">
+                <span class="info-label">IP Address:</span>
+                <span class="info-value"><?php echo $_SERVER['SERVER_ADDR']; ?></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Availability Zone:</span>
+                <span class="info-value"><?php echo getAvailabilityZone(); ?></span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Target Group:</span>
+                <span class="info-value"><?php echo getTargetGroup(); ?></span>
+            </div>
         </div>
-        <div class="info-item">
-            <span class="info-label">Availability Zone:</span>
-            <span class="info-value"><?php echo getAvailabilityZone(); ?></span>
+        <div class="header-content">
+            <h1>AnyCompany Insurance Quote Tool</h1>
         </div>
-        <div class="info-item">
-            <span class="info-label">Target Group:</span>
-            <span class="info-value"><?php echo getTargetGroup(); ?></span>
+        <div class="user-info">
+            Welcome, Employee | ID: EMP123 | <a href="#" style="color: white;">Logout</a>
         </div>
-    </div>
-    
-    <div class="user-info">
-        Welcome, Employee | ID: EMP123 | <a href="#" style="color: white;">Logout</a>
-    </div>
-
-    <div class="header">
-        <h1>AnyCompany Insurance Quote Tool</h1>
-    </div>
+    </header>
 
     <nav class="nav-bar">
         <ul>
