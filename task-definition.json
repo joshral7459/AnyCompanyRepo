@@ -1,0 +1,46 @@
+{
+    "family": "anycompany-task",
+    "containerDefinitions": [
+        {
+            "name": "anycompany-container",
+            "image": "841162696521.dkr.ecr.us-east-1.amazonaws.com/anycompany-repo:84dc4ab",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "containerPort": 80,
+                    "hostPort": 80,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "ECS_CLUSTER_NAME",
+                    "value": "ECS_CLUSTER_NAME_PLACEHOLDER"
+                }
+            ],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "linuxParameters": {
+                "initProcessEnabled": true
+            },
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/anycompany-task",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            },
+            "systemControls": []
+        }
+    ],
+    "taskRoleArn": "arn:aws:iam::841162696521:role/ECSExecuteCommandTaskRole",
+    "executionRoleArn": "arn:aws:iam::841162696521:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "volumes": [],
+    "placementConstraints": [],
+    "requiresCompatibilities": [],
+    "cpu": "256",
+    "memory": "512"
+}
