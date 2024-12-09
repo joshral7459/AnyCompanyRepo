@@ -197,7 +197,8 @@ function getTaskArn() {
             font-size: 0.8rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             z-index: 1000;
-            max-width: 200px;
+            width: auto;
+            white-space: nowrap;
         }
         
         .container-info h2 {
@@ -218,6 +219,7 @@ function getTaskArn() {
         .info-value {
             color: #2a5577;
         }
+
         
         /* Responsive design */
         @media (max-width: 768px) {
