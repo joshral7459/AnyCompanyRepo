@@ -18,7 +18,10 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Install AWS SDK
 RUN composer require aws/aws-sdk-php
 # Enable PHP module using the correct name
-RUN a2enmod php7
+RUN a2enmod php7 rewrite
+
+# Copy custom Apache configuration
+COPY custom-apache-config.conf /etc/apache2/sites-available/000-default.conf
 
 COPY html/ /var/www/html/
 
