@@ -263,9 +263,66 @@ function getTaskArn() {
             color: blue;
             font-weight: bold;
         }
+        .container-info {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(26, 69, 103, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+            max-width: 300px;
+            font-size: 14px;
+        }
+        
+        .container-info h2 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .info-item {
+            margin-bottom: 5px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+        }
+        
+        .info-value {
+            color: #ffffff;
+            font-weight: normal;
+        }
+        
+        @media (max-width: 768px) {
+            .container-info {
+                font-size: 12px;
+            }
+            .container-info h2 {
+                font-size: 14px;
+            }
+        }
+
     </style>
 </head>
+
 <body>
+    <div class="container-info">
+        <h2>Container Information</h2>
+        <div class="info-item">
+            <span class="info-label">IP Address:</span>
+            <span class="info-value"><?php echo $_SERVER['SERVER_ADDR']; ?></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Availability Zone:</span>
+            <span class="info-value"><?php echo getAvailabilityZone(); ?></span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Target Group:</span>
+            <span class="info-value"><?php echo getTargetGroup(); ?></span>
+        </div>
+    </div>
+    
     <div class="user-info">
         Welcome, Employee | ID: EMP123 | <a href="#" style="color: white;">Logout</a>
     </div>
@@ -283,23 +340,6 @@ function getTaskArn() {
             <li><a href="#">Reports</a></li>
         </ul>
     </nav>
-
-<div class="container">
-    <div class="container-info">
-        <h2>Container Information</h2>
-        <div class="info-item">
-            <span class="info-label">IP Address:</span>
-            <span class="info-value"><?php echo $_SERVER['SERVER_ADDR']; ?></span>
-        </div>
-        <div class="info-item">
-            <span class="info-label">Availability Zone:</span>
-            <span class="info-value"><?php echo getAvailabilityZone(); ?></span>
-        </div>
-        <div class="info-item">
-            <span class="info-label">Target Group:</span>
-            <span class="info-value"><?php echo getTargetGroup(); ?></span>
-        </div>
-    </div>
 
     <form id="quoteForm">
             <div class="form-section">
