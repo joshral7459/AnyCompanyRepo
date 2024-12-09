@@ -187,28 +187,32 @@ function getTaskArn() {
         
         /* Container info styles */
         .container-info {
-            background-color: #f0f0f0;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(240, 240, 240, 0.7);
             color: #333;
-            padding: 1rem;
-            border-radius: 5px;
-            max-width: 1200px;
-            margin: 1rem auto;
-            font-size: 0.9rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 5px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            z-index: 1000;
+            max-width: 200px;
         }
         
         .container-info h2 {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-            color: white;
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+            color: #1a4567;
         }
-                
+        
         .info-item {
-            margin-bottom: 0.3rem;
+            margin-bottom: 2px;
         }
         
         .info-label {
             font-weight: bold;
+            margin-right: 3px;
         }
         
         .info-value {
@@ -339,18 +343,19 @@ function getTaskArn() {
     <div class="container-info">
         <h2>Container Information</h2>
         <div class="info-item">
-            <span class="info-label">IP Address:</span>
+            <span class="info-label">IP:</span>
             <span class="info-value"><?php echo $_SERVER['SERVER_ADDR']; ?></span>
         </div>
         <div class="info-item">
-            <span class="info-label">Availability Zone:</span>
+            <span class="info-label">AZ:</span>
             <span class="info-value"><?php echo getAvailabilityZone(); ?></span>
         </div>
         <div class="info-item">
-            <span class="info-label">Target Group:</span>
+            <span class="info-label">TG:</span>
             <span class="info-value"><?php echo getTargetGroup(); ?></span>
         </div>
     </div>
+
     <header>
         <div class="header-content">
             <h1>AnyCompany Insurance Quote Tool</h1>
