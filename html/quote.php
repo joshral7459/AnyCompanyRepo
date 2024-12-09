@@ -26,78 +26,59 @@ function getTargetGroup() {
         putenv('AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true');
         $client = new EcsClient([
             'version' => 'latest',
-            'region'  => 'us-east-1'  // Make sure this matches your region
+            'region'  => 'us-east-1'
         ]);
 
-        // Get the cluster name from an environment variable
         $clusterName = getenv('ECS_CLUSTER_NAME');
-        error_log("Cluster Name: " . ($clusterName === false ? "Not set" : $clusterName));
         if ($clusterName === false) {
             return 'Cluster name not available';
         }
-		
-        // Get the task ARN from the task metadata
+        
         $taskArn = getTaskArn();
-        error_log("Task ARN: " . ($taskArn === null ? "Not available" : $taskArn));
         if ($taskArn === null) {
             return 'Task ARN not available';
         }
 
-        // Describe the task
         $task = $client->describeTasks([
             'cluster' => $clusterName,
             'tasks' => [$taskArn]
         ]);
 
-        error_log("Task Description: " . json_encode($task));
-        
-        if (!isset($task['tasks']) || empty($task['tasks'])) {
-            error_log("No tasks found in the response");
+        if (!isset($task['tasks'][0]['group'])) {
             return 'No tasks found';
         }
 
-        if (isset($task['tasks'][0]['group'])) {
-            $serviceArn = $task['tasks'][0]['group'];
-            error_log("Service ARN: " . $serviceArn);           
-            // If the group starts with "service:", it's a service name
-            if (strpos($serviceArn, 'service:') === 0) {
-                $serviceName = substr($serviceArn, 8);
-                error_log("Service Name: " . $serviceName);
-                
-                $service = $client->describeServices([
-                    'cluster' => $clusterName,
-                    'services' => [$serviceName]
-                ]);
+        $serviceArn = $task['tasks'][0]['group'];
+        if (strpos($serviceArn, 'service:') !== 0) {
+            return 'Not a service task';
+        }
 
-                error_log("Service Description: " . json_encode($service));
-                
-                if (!isset($service['services']) || empty($service['services'])) {
-                    error_log("No services found in the response");
-                    return 'No services found';
-                }
+        $serviceName = substr($serviceArn, 8);
+        $service = $client->describeServices([
+            'cluster' => $clusterName,
+            'services' => [$serviceName]
+        ]);
 
-                if (isset($service['services'][0]['loadBalancers'])) {
-                    foreach ($service['services'][0]['loadBalancers'] as $loadBalancer) {
-                        if (isset($loadBalancer['targetGroupArn'])) {
-                            $fullArn = $loadBalancer['targetGroupArn'];
-                            error_log("Target Group ARN: " . $fullArn);
-                            
-                            if (strpos($fullArn, 'Lo-Capacity') !== false) {
-                                return 'Lo-Capacity';
-                            } elseif (strpos($fullArn, 'Hi-Capacity') !== false) {
-                                return 'Hi-Capacity';
-                            }
-                        }
-                    }
+        if (!isset($service['services'][0]['loadBalancers'])) {
+            return 'No load balancers found';
+        }
+
+        foreach ($service['services'][0]['loadBalancers'] as $loadBalancer) {
+            if (isset($loadBalancer['targetGroupArn'])) {
+                $fullArn = $loadBalancer['targetGroupArn'];
+                if (strpos($fullArn, 'Lo-Capacity') !== false) {
+                    return 'Lo-Capacity';
+                } elseif (strpos($fullArn, 'Hi-Capacity') !== false) {
+                    return 'Hi-Capacity';
                 }
             }
         }
     } catch (AwsException $e) {
-        error_log("AWS Exception: " . $e->getMessage());
-        return 'Error: ' . $e->getMessage();
+        // Log the error to your preferred logging system
+        return 'AWS Error occurred';
     } catch (Exception $e) {
-        error_log("General Exception: " . $e->getMessage());
-        return 'Error: ' . $e->getMessage();
+        // Log the error to your preferred logging system
+        return 'General error occurred';
     }
 
     return 'Target Group not available';
