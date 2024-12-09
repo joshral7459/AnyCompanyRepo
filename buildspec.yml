@@ -8,6 +8,7 @@ phases:
       - echo "AWS Region = $AWS_DEFAULT_REGION"
       - echo "Repository URI = $REPOSITORY_URI"
       - echo "Image tag = $IMAGE_TAG"
+      - echo "ECS Cluster Name = $ECS_CLUSTER_NAME"  # Added this line
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/nginx:alpine
   build:
@@ -17,9 +18,12 @@ phases:
     commands:
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Creating image definitions file...
-      # Replace 'nginx-container' with your actual ECS task definition container name
       - echo '[{"name":"anycompany-container","imageUri":"'$REPOSITORY_URI:$IMAGE_TAG'"}]' > imageDefinitions.json
+      - echo Updating task definition...
+      - sed -i "s/ECS_CLUSTER_NAME_PLACEHOLDER/$ECS_CLUSTER_NAME/g" task-definition.json  # Added this line
 artifacts:
   files:
     - imageDefinitions.json
+    - task-definition.json  # Added this line
   name: imagedefinitions
+
