@@ -22,13 +22,7 @@ function getAvailabilityZone() {
         return 'Not available';
     }
 }
-function getTargetGroup() {
-    global $capacity;
-    if ($capacity === 'lo') {
-        return 'Lo-Capacity';
-    } elseif ($capacity === 'hi') {
-        return 'Hi-Capacity';
-        
+function getTargetGroup() {     
     try {
         putenv('AWS_SUPPRESS_PHP_DEPRECATION_WARNING=true');
         $client = new EcsClient([
