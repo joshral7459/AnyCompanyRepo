@@ -196,33 +196,30 @@ function getTaskArn() {
             color: #333;
             padding: 5px;
             border-radius: 3px;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             z-index: 1000;
-            width: auto;
-            white-space: nowrap;
-            display: inline-block; /* This should remove any extra space */
+            display: inline-block;
         }
         
         .container-info h2 {
-            font-size: 0.9rem;
-            margin-bottom: 3px;
+            font-size: 0.8rem;
+            margin-bottom: 2px;
             color: #1a4567;
         }
         
         .info-item {
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
         
         .info-label {
             font-weight: bold;
-            margin-right: 3px;
+            margin-right: 2px;
         }
         
         .info-value {
             color: #2a5577;
         }
-
         
         /* Responsive design */
         @media (max-width: 768px) {
@@ -360,7 +357,7 @@ function getTaskArn() {
             <span class="info-value"><?php echo getTargetGroup(); ?></span>
         </div>
     </div>
-
+    
     <header>
         <div class="header-content">
             <h1>AnyCompany Insurance Quote Tool</h1>
@@ -380,21 +377,6 @@ function getTaskArn() {
         </ul>
     </nav>
 
-    <div class="container-info">
-        <h2>Container Information</h2>
-        <div class="info-item">
-            <span class="info-label">IP Address:</span>
-            <span class="info-value"><?php echo $_SERVER['SERVER_ADDR']; ?></span>
-        </div>
-        <div class="info-item">
-            <span class="info-label">Availability Zone:</span>
-            <span class="info-value"><?php echo getAvailabilityZone(); ?></span>
-        </div>
-        <div class="info-item">
-            <span class="info-label">Target Group:</span>
-            <span class="info-value"><?php echo getTargetGroup(); ?></span>
-        </div>
-    </div>
     <div class="container">
         <form id="quoteForm">
             <div class="form-section">
@@ -477,8 +459,8 @@ function getTaskArn() {
             <span>Total Coverage:</span>
             <span id="totalCoverage">$0.00</span>
         </div>
-</div.container>
-    
+    </div>
+</div>    
 <script>
     function calculateQuote() {
         try {
