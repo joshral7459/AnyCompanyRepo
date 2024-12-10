@@ -28,6 +28,13 @@ COPY html/ /var/www/html/
 
 WORKDIR /var/www/html
 
+# Set correct permissions
+RUN chown -R www-data:www-data /var/www/html && \
+    chmod -R 755 /var/www/html
+
 EXPOSE 80
+
+# Switch to www-data user
+USER www-data
 
 CMD ["apache2-foreground"]
