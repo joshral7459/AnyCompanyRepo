@@ -33,6 +33,5 @@ RUN chown -R www-data:www-data /var/www/html
 EXPOSE 80
 
 # Set the user for the container
-USER www-data
 
 CMD ["apache2-foreground"]
