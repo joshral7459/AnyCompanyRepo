@@ -26,7 +26,7 @@ phases:
 
 artifacts:
   files:
-    - imagedefinitions.json
+    - imageDefinitions.json
     - task-definition.json
   name: build-artifact
 
