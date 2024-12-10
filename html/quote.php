@@ -1,9 +1,9 @@
 <?php
 $capacity = '';
 if (strpos($_SERVER['REQUEST_URI'], '/lo-capacity') !== false) {
-    $capacity = '/lo-capacity';
+    $capacity = 'lo-capacity';
 } elseif (strpos($_SERVER['REQUEST_URI'], '/hi-capacity') !== false) {
-    $capacity = '/hi-capacity';
+    $capacity = 'hi-capacity';
 }
 $base_path = $capacity ? $capacity : '';
 require '/var/www/html/vendor/autoload.php';
@@ -376,11 +376,11 @@ function getTaskArn() {
 
     <nav class="nav-bar">
         <ul>
-            <li><a href="/index.html<?php echo $capacity; ?>">Home</a></li>
-            <li><a href="/quote.php<?php echo $capacity; ?>">Quote Tool</a></li>
-            <li><a href="#">Claims</a></li>
-            <li><a href="#">Customers</a></li>
-            <li><a href="#">Reports</a></li>
+            <li><a href="<?php echo $base_path; ?>/index.html">Home</a></li>
+            <li><a href="<?php echo $base_path; ?>/quote.php">Quote Tool</a></li>
+            <li><a href="<?php echo $base_path; ?>#">Claims</a></li>
+            <li><a href="<?php echo $base_path; ?>#">Customers</a></li>
+            <li><a href="<?php echo $base_path; ?>#">Reports</a></li>
         </ul>
     </nav>
 
