@@ -30,7 +30,6 @@ WORKDIR /var/www/html
 EXPOSE 80
 
 CMD ["apache2-foreground"]
-RUN chown -R www-data:www-data /var/www/html
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html
