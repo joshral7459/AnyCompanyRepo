@@ -196,9 +196,10 @@ if (strpos($_SERVER['REQUEST_URI'], '/lo-capacity') !== false) {
             <div class="stat-label">Quotes Generated Today</div>
             <div class="stat-number">
                 <?php
-                echo ($capacity === 'lo-capacity') ? 5 : (($(($capacity === 'hi-capacity') ? 11 : 8);
+                echo ($capacity === 'lo-capacity') ? 5 : (($capacity === 'hi-capacity') ? 11 : 8);
                 ?>
             </div>
+
             <div class="stat-label">Policies Sold Today</div>
         </div>
 
