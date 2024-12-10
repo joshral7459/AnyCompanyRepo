@@ -376,7 +376,7 @@ function getTaskArn() {
 
     <nav class="nav-bar">
         <ul>
-            <li><a href="<?php echo $base_path; ?>/index.html">Home</a></li>
+            <li><a href="<?php echo $base_path; ?>/index.php">Home</a></li>
             <li><a href="<?php echo $base_path; ?>/quote.php">Quote Tool</a></li>
             <li><a href="<?php echo $base_path; ?>#">Claims</a></li>
             <li><a href="<?php echo $base_path; ?>#">Customers</a></li>
