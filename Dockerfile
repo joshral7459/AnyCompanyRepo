@@ -22,7 +22,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN a2enmod php7 rewrite
 
 # Copy custom Apache configuration and web content
-COPY custom-apache-config.conf /etc/apache2/sites-available/000-default.conf
+COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY html/ /var/www/html/
 
 WORKDIR /var/www/html
