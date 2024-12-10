@@ -13,15 +13,16 @@ phases:
       - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/nginx:alpine
 
   build:
-    commands:
-      - echo "Ensuring Dockerfile sets correct permissions..."
-      - grep -q "chown -R www-data:www-data /var/www/html" Dockerfile || echo "RUN chown -R www-data:www-data /var/www/html" >> Dockerfile
-      - echo "Verifying Apache configuration files..."
-      - ls -l custom-apache-config.conf ports.conf || echo "Warning: One or more config files not found"
-      - echo "Renaming custom-apache-config.conf to 000-default.conf if needed..."
-      - [ -f custom-apache-config.conf ] && mv custom-apache-config.conf 000-default.conf || echo "000-default.conf already exists or custom-apache-config.conf not found"
-      - echo "Building the Docker image..."
-      - docker build --build-arg AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID --build-arg AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -t $REPOSITORY_URI:$IMAGE_TAG .
+  commands:
+    - echo "Ensuring Dockerfile sets correct permissions..."
+    - grep -q "chown -R www-data:www-data /var/www/html" Dockerfile || echo "RUN chown -R www-data:www-data /var/www/html" >> Dockerfile
+    - echo "Verifying Apache configuration files..."
+    - ls -l custom-apache-config.conf ports.conf || echo "Warning: One or more config files not found"
+    - echo "Renaming custom-apache-config.conf to 000-default.conf if needed..."
+    - if [ -f custom-apache-config.conf ]; then mv custom-apache-config.conf 000-default.conf; else echo "000-default.conf already exists or custom-apache-config.conf not found"; fi
+    - echo "Building the Docker image..."
+    - docker build --build-arg AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID --build-arg AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -t $REPOSITORY_URI:$IMAGE_TAG .
+
 
   post_build:
     commands:
