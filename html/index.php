@@ -159,8 +159,8 @@ if (strpos($_SERVER['REQUEST_URI'], '/lo-capacity') !== false) {
 
     <nav class="nav-bar">
         <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="quote.php">Quote Tool</a></li>
+            <li><a href="/<?php echo $capacity ? $capacity . '/' : ''; ?>">Home</a></li>
+            <li><a href="/<?php echo $capacity ? $capacity . '/' : ''; ?>quote.php">Quote Tool</a></li>
             <li><a href="#">Claims</a></li>
             <li><a href="#">Customers</a></li>
             <li><a href="#">Reports</a></li>
@@ -170,11 +170,11 @@ if (strpos($_SERVER['REQUEST_URI'], '/lo-capacity') !== false) {
     <div class="container">
         <div class="quick-actions">
             <h2>Quick Actions</h2>
-            <a href="quote-tool.html" class="button">New Quote</a>
-            <a href="#" class="button">Process Claim</a>
-            <a href="#" class="button">Customer Search</a>
-            <a href="#" class="button">Generate Report</a>
-        </div>
+                <a href="/<?php echo $capacity ? $capacity . '/' : ''; ?>quote.php" class="button">New Quote</a>
+                <a href="#" class="button">Process Claim</a>
+                <a href="#" class="button">Customer Search</a>
+                <a href="#" class="button">Generate Report</a>
+            </div>
 
         <div class="dashboard-grid">
             <div class="dashboard-card">
@@ -185,13 +185,22 @@ if (strpos($_SERVER['REQUEST_URI'], '/lo-capacity') !== false) {
                 <div class="stat-label">Policies Sold Today</div>
             </div>
 
-            <div class="dashboard-card">
-                <h3>Performance Metrics</h3>
-                <div class="stat-number">92%</div>
-                <div class="stat-label">Quote Conversion Rate</div>
-                <div class="stat-number">$25,450</div>
-                <div class="stat-label">Premium Value This Month</div>
+        <div class="dashboard-card">
+            <h3>Daily Statistics (<?php echo $capacity ? ucfirst($capacity) : 'All'; ?>)</h3>
+            <div class="stat-number">
+                <?php
+                // Here you would query your database or data source based on the capacity
+                echo ($capacity === 'lo-capacity') ? 10 : (($capacity === 'hi-capacity') ? 20 : 15);
+                ?>
             </div>
+            <div class="stat-label">Quotes Generated Today</div>
+            <div class="stat-number">
+                <?php
+                echo ($capacity === 'lo-capacity') ? 5 : (($(($capacity === 'hi-capacity') ? 11 : 8);
+                ?>
+            </div>
+            <div class="stat-label">Policies Sold Today</div>
+        </div>
 
             <div class="dashboard-card">
                 <h3>Recent Activity</h3>
