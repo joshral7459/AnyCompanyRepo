@@ -28,8 +28,9 @@ phases:
 
 artifacts:
   files:
-    - '**/*'
-  name: anycompany-build-artifact
+    - imageDefinitions.json
+    - task-definition.json
+  name: build-artifacts-$(date +%Y-%m-%d-%H-%M-%S)
 
 cache:
   paths:
