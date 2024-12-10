@@ -34,7 +34,5 @@ RUN chown -R www-data:www-data /var/www/html
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html
-
-# Configure Apache to run as www-data
-RUN sed -i 's/User ${APACHE_RUN_USER}/User www-data/' /etc/apache2/apache2.conf
-RUN sed -i 's/Group ${APACHE_RUN_GROUP}/Group www-data/' /etc/apache2/apache2.conf
+# Set the user for the container
+USER www-data
