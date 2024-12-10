@@ -190,7 +190,7 @@ if (strpos($_SERVER['REQUEST_URI'], '/lo-capacity') !== false) {
             <div class="stat-number">
                 <?php
                 // Here you would query your database or data source based on the capacity
-                echo ($capacity === 'lo-capacity') ? 10 : (($capacity === 'hi-capacity') ? 20 : 15);
+                echo ($capacity === 'lo-capacity') ? 5 : (($capacity === 'hi-capacity') ? 11 : 8);
                 ?>
             </div>
             <div class="stat-label">Quotes Generated Today</div>
