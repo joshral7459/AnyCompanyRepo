@@ -1,4 +1,10 @@
 <?php
+$capacity = '';
+if (strpos($_SERVER['REQUEST_URI'], '/lo-capacity') !== false) {
+    $capacity = '/lo-capacity';
+} elseif (strpos($_SERVER['REQUEST_URI'], '/hi-capacity') !== false) {
+    $capacity = '/hi-capacity';
+}
 require '/var/www/html/vendor/autoload.php';
 
 use Aws\Ecs\EcsClient;
@@ -369,8 +375,8 @@ function getTaskArn() {
 
     <nav class="nav-bar">
         <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="quote.php">Quote Tool</a></li>
+            <li><a href="/index.html<?php echo $capacity; ?>">Home</a></li>
+            <li><a href="/quote.php<?php echo $capacity; ?>">Quote Tool</a></li>
             <li><a href="#">Claims</a></li>
             <li><a href="#">Customers</a></li>
             <li><a href="#">Reports</a></li>
