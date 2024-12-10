@@ -5,6 +5,7 @@ if (strpos($_SERVER['REQUEST_URI'], '/lo-capacity') !== false) {
 } elseif (strpos($_SERVER['REQUEST_URI'], '/hi-capacity') !== false) {
     $capacity = '/hi-capacity';
 }
+$base_path = $capacity ? $capacity : '';
 require '/var/www/html/vendor/autoload.php';
 
 use Aws\Ecs\EcsClient;
