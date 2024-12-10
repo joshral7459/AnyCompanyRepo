@@ -1,5 +1,5 @@
 <?php
-$capacity = '';
+$capacity = $_GET['capacity'] ?? '';
 if (strpos($_SERVER['REQUEST_URI'], '/lo-capacity') !== false) {
     $capacity = 'lo-capacity';
 } elseif (strpos($_SERVER['REQUEST_URI'], '/hi-capacity') !== false) {
