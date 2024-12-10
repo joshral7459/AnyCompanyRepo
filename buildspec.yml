@@ -17,7 +17,7 @@ phases:
       - echo "Ensuring Dockerfile sets correct permissions..."
       - grep -q "chown -R www-data:www-data /var/www/html" Dockerfile || echo "RUN chown -R www-data:www-data /var/www/html" >> Dockerfile
       - echo "Copying Apache configuration files..."
-      - cp /path/to/your/000-default.conf ./000-default.conf
+      - cp custom-apache-config.conf ./000-default.conf
       - cp /path/to/your/ports.conf ./ports.conf
       - echo "Building the Docker image..."
       - docker build --build-arg AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID --build-arg AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -t $REPOSITORY_URI:$IMAGE_TAG .
