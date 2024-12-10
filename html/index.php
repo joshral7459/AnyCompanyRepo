@@ -1,3 +1,13 @@
+<?php
+$capacity = '';
+if (strpos($_SERVER['REQUEST_URI'], '/lo-capacity') !== false) {
+    $capacity = 'lo-capacity';
+} elseif (strpos($_SERVER['REQUEST_URI'], '/hi-capacity') !== false) {
+    $capacity = 'hi-capacity';
+}
+// Use $capacity variable as needed in your script
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
