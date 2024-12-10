@@ -27,11 +27,6 @@ COPY html/ /var/www/html/
 
 WORKDIR /var/www/html
 
-# Set correct permissions
-RUN chown -R www-data:www-data /var/www/html
-
 EXPOSE 80
-
-# Set the user for the container
 
 CMD ["apache2-foreground"]
