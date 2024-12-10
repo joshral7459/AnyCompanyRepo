@@ -35,6 +35,7 @@ RUN chown -R www-data:www-data /var/www/html && \
 EXPOSE 80
 
 # Switch to www-data user
-USER www-data
+RUN sed -i 's/User ${APACHE_RUN_USER}/User www-data/' /etc/apache2/apache2.conf
+RUN sed -i 's/Group ${APACHE_RUN_GROUP}/Group www-data/' /etc/apache2/apache2.conf
 
 CMD ["apache2-foreground"]
