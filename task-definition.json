@@ -3,7 +3,7 @@
     "containerDefinitions": [
         {
             "name": "anycompany-container",
-            "image": "841162696521.dkr.ecr.us-east-1.amazonaws.com/anycompany-repo:84dc4ab",
+            "image": "841162696521.dkr.ecr.us-east-1.amazonaws.com/anycompany-repo:IMAGE_TAG_PLACEHOLDER",
             "cpu": 0,
             "portMappings": [
                 {
