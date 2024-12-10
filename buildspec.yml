@@ -7,36 +7,30 @@ env:
 phases:
   pre_build:
     commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/anycompany-repo
       - IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION:0:7}
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
-      - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/nginx:alpine
-
-build:
-  commands:
-    - echo "Ensuring Dockerfile sets correct permissions..."
-    - grep -q "chown -R www-data:www-data /var/www/html" Dockerfile || echo "RUN chown -R www-data:www-data /var/www/html" >> Dockerfile
-    - echo "Verifying Apache configuration files..."
-    - ls -l 000-default.conf ports.conf || echo "Warning: One or more config files not found"
-    - echo "Building the Docker image..."
-    - docker build --build-arg AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID --build-arg AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -t $REPOSITORY_URI:$IMAGE_TAG .
-
-
+  
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build --build-arg AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID --build-arg AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -t $REPOSITORY_URI:$IMAGE_TAG .
+  
   post_build:
     commands:
-      - echo "Pushing the Docker image..."
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
       - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo "Creating image definitions file..."
-      - echo '[{"name":"anycompany-container","imageUri":"'$REPOSITORY_URI:$IMAGE_TAG'"}]' > imageDefinitions.json
-      - echo "Updating task definition..."
-      - sed -i "s/ECS_CLUSTER_NAME_PLACEHOLDER/$ECS_CLUSTER_NAME/g" task-definition.json
-      - sed -i "s|IMAGE_PLACEHOLDER|$REPOSITORY_URI:$IMAGE_TAG|g" task-definition.json
+      - echo Writing image definitions file...
+      - printf '[{"name":"anycompany-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - cat imagedefinitions.json  # This will print the contents of the file for debugging
 
 artifacts:
-  files:
-    - imageDefinitions.json
-    - task-definition.json
-  name: build-artifacts-$(date +%Y-%m-%d-%H-%M-%S)
+  files: 
+    - imagedefinitions.json
+  name: build-artifact
 
 cache:
   paths:
