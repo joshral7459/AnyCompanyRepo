@@ -1,9 +1,5 @@
 version: 0.2
 
-env:
-  variables:
-    DOCKER_BUILDKIT: "1"
-
 phases:
   pre_build:
     commands:
@@ -21,18 +17,19 @@ phases:
   
   post_build:
     commands:
-      - grep -q "chown -R www-data:www-data /var/www/html" Dockerfile || echo "RUN chown -R www-data:www-data /var/www/html" >> Dockerfile
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Writing image definitions file...
       - printf '[{"name":"anycompany-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - cat imagedefinitions.json  # This will print the contents of the file for debugging
+      - cat imagedefinitions.json
+      - echo Listing contents of current directory
+      - ls -la
 
 artifacts:
-  files: 
-    - imagedefinitions.json
-  name: build-artifact
+  files:
+    - '**/*'
+  name: anycompany-build-artifact
 
 cache:
   paths:
