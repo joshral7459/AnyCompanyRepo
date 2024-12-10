@@ -19,7 +19,12 @@ phases:
       - echo "Verifying Apache configuration files..."
       - ls -l custom-apache-config.conf ports.conf || echo "Warning: One or more config files not found"
       - echo "Renaming custom-apache-config.conf to 000-default.conf if needed..."
-      - if [ -f custom-apache-config.conf ]; then mv custom-apache-config.conf 000-default.conf; else echo "000-default.conf already exists or custom-apache-config.conf not found"; fi
+      - |
+        if [ -f custom-apache-config.conf ]; then 
+          mv custom-apache-config.conf 000-default.conf
+        else 
+          echo "000-default.conf already exists or custom-apache-config.conf not found"
+        fi
       - echo "Building the Docker image..."
       - docker build --build-arg AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID --build-arg AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION -t $REPOSITORY_URI:$IMAGE_TAG .
 
