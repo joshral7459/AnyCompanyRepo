@@ -31,3 +31,10 @@ EXPOSE 80
 
 CMD ["apache2-foreground"]
 RUN chown -R www-data:www-data /var/www/html
+
+# If you're using Apache, make sure it runs as www-data
+RUN sed -i 's/APACHE_RUN_USER=www-data/APACHE_RUN_USER=www-data/' /etc/apache2/envvars
+RUN sed -i 's/APACHE_RUN_GROUP=www-data/APACHE_RUN_GROUP=www-data/' /etc/apache2/envvars
+
+# Set the user for the container
+USER www-data
