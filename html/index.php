@@ -186,18 +186,13 @@ if (strpos($_SERVER['REQUEST_URI'], '/lo-capacity') !== false) {
             </div>
 
         <div class="dashboard-card">
-            <h3>Daily Statistics (<?php echo $capacity ? ucfirst($capacity) : 'All'; ?>)</h3>
+            <h3>Daily Statistics</h3>
             <div class="stat-number">
-                <?php
-                // Here you would query your database or data source based on the capacity
-                echo ($capacity === 'lo-capacity') ? 5 : (($capacity === 'hi-capacity') ? 11 : 8);
-                ?>
+                <div class="stat-number">10</div>
             </div>
             <div class="stat-label">Quotes Generated Today</div>
             <div class="stat-number">
-                <?php
-                echo ($capacity === 'lo-capacity') ? 5 : (($capacity === 'hi-capacity') ? 11 : 8);
-                ?>
+                <div class="stat-number">15</div>
             </div>
 
             <div class="stat-label">Policies Sold Today</div>
