@@ -24,7 +24,6 @@ phases:
       - echo Writing image definitions file...
       - printf '[{"name":"anycompany-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imageDefinitions.json
       - cat imageDefinitions.json
-      - COPY healthcheck.php /var/www/html/healthcheck.php
 
 artifacts:
   files:
