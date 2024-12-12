@@ -25,14 +25,12 @@ RUN a2enmod php7 rewrite
 # Copy custom Apache configuration and web content
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY html/ /var/www/html/
-COPY healthcheck.php /var/www/html/healthcheck.php
 
 WORKDIR /var/www/html
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html && \
     chmod -R 755 /var/www/html && \
-    chmod 644 /var/www/html/healthcheck.php  # Ensure healthcheck.php is readable
 
 EXPOSE 80
 
