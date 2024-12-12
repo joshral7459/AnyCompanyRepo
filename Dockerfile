@@ -31,7 +31,8 @@ WORKDIR /var/www/html
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html && \
-    chmod -R 755 /var/www/html
+    chmod -R 755 /var/www/html && \
+    chmod 644 /var/www/html/healthcheck.php  # Ensure healthcheck.php is readable
 
 EXPOSE 80
 
