@@ -13,6 +13,8 @@ phases:
       - echo Build started on `date`
       - echo Building the Docker image...
       - grep -q "chown -R www-data:www-data /var/www/html" Dockerfile || echo "RUN chown -R www-data:www-data /var/www/html" >> Dockerfile
+      -chmod 644 /var/www/html/healthcheck.php
+      -chown www-data:www-data /var/www/html/healthcheck.php
       - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
       - docker tag $REPOSITORY_URI:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG
   
