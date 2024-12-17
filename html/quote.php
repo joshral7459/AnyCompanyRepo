@@ -377,11 +377,11 @@ function getTaskArn() {
 
     <nav class="nav-bar">
         <ul>
-            <li><a href="/<?php echo $capacity ? $capacity . '/' : ''; ?>">Home</a></li>
-            <li><a href="/<?php echo $capacity ? $capacity . '/' : ''; ?>quote.php">Quote Tool</a></li>
-            <li><a href="#">Claims</a></li>
-            <li><a href="#">Customers</a></li>
-            <li><a href="#">Reports</a></li>
+            <li><a href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/<?php echo $capacity ? $capacity . '/' : ''; ?>">Home</a></li>
+            <li><a href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/<?php echo $capacity ? $capacity . '/' : ''; ?>quote.php">Quote Tool</a></li>
+            <li><a href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/<?php echo $capacity ? $capacity . '/' : ''; ?>#">Claims</a></li>
+            <li><a href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/<?php echo $capacity ? $capacity . '/' : ''; ?>#">Customers</a></li>
+            <li><a href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/<?php echo $capacity ? $capacity . '/' : ''; ?>#">Reports</a></li>
         </ul>
     </nav>
 
