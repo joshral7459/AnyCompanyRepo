@@ -20,7 +20,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
     && composer require aws/aws-sdk-php
 
 # Enable PHP modules and Apache modules
-RUN a2enmod php7 rewrite
+RUN a2enmod php7 rewrite header
 
 # Copy custom Apache configuration and web content
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
