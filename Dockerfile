@@ -21,6 +21,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # Enable PHP modules and Apache modules
 RUN a2enmod php7 rewrite headers
+RUN ls /usr/lib/apache2/modules/
 
 # Copy custom Apache configuration and web content
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
