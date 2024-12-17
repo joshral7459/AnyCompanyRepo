@@ -171,11 +171,12 @@ if (strpos($_SERVER['REQUEST_URI'], '/lo-capacity') !== false) {
     <div class="container">
         <div class="quick-actions">
             <h2>Quick Actions</h2>
-                <a href="/<?php echo $capacity ? $capacity . '/' : ''; ?>quote.php" class="button">New Quote</a>
-                <a href="#" class="button">Process Claim</a>
-                <a href="#" class="button">Customer Search</a>
-                <a href="#" class="button">Generate Report</a>
-            </div>
+            <a href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/<?php echo $capacity ? $capacity . '/' : ''; ?>quote.php" class="button">New Quote</a>
+            <a href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/<?php echo $capacity ? $capacity . '/' : ''; ?>#" class="button">Process Claim</a>
+            <a href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/<?php echo $capacity ? $capacity . '/' : ''; ?>#" class="button">Customer Search</a>
+            <a href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/<?php echo $capacity ? $capacity . '/' : ''; ?>#" class="button">Generate Report</a>
+        </div>
+
 
         <div class="dashboard-grid">
             <div class="dashboard-card">
