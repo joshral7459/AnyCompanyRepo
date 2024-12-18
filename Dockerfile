@@ -21,10 +21,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # Enable PHP modules and Apache modules
 RUN a2enmod php7 rewrite headers
-RUN echo "LoadModule headers_module /usr/lib/apache2/modules/mod_headers.so" >> /etc/apache2/apache2.conf
-
-# Verify Apache modules
-RUN apache2ctl -M | grep headers
 
 # Copy custom Apache configuration and web content
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
@@ -41,8 +37,5 @@ EXPOSE 80
 # Switch to www-data user
 RUN sed -i 's/User ${APACHE_RUN_USER}/User www-data/' /etc/apache2/apache2.conf
 RUN sed -i 's/Group ${APACHE_RUN_GROUP}/Group www-data/' /etc/apache2/apache2.conf
-
-# Verify Apache configuration
-RUN apache2ctl configtest
 
 CMD ["apache2-foreground"]
