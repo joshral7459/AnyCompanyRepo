@@ -472,7 +472,10 @@ function getTaskArn() {
 <script>
     function calculateQuote() {
         try {
-            // This is a simple example calculation
+            // Intentionally cause an error by accessing an undefined variable
+            console.log(undefinedVariable);
+
+            // The code below will not be executed due to the error above
             const coverageAmount = document.getElementById('coverageAmount').value;
             const riskLevel = document.getElementById('riskLevel').value;
             const term = document.getElementById('term').value;
@@ -505,7 +508,7 @@ function getTaskArn() {
             document.getElementById('quoteResults').style.display = 'block';
         } catch (error) {
             console.error('Error calculating quote:', error);
-            alert('An error occurred while calculating the quote');
+            alert('An error occurred while calculating the quote: ' + error.message);
         }
     }
 </script>
