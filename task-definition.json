@@ -48,7 +48,7 @@
     "networkMode": "awsvpc",
     "volumes": [],
     "placementConstraints": [],
-    "requiresCompatibilities": [],
+    "requiresCompatibilities": ["FARGATE"],
     "cpu": "256",
     "memory": "512"
 }
