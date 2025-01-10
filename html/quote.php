@@ -117,7 +117,7 @@ function getTaskArn() {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <title>AnyCompany Insurance Quote Tool</title>
+    <title>AnyCompany Insurance Quote Tool - UPDATED</title>
     <style>
         /* Base styles */
         * {
@@ -368,7 +368,7 @@ function getTaskArn() {
     
     <header>
         <div class="header-content">
-            <h1>AnyCompany Insurance Quote Tool</h1>
+            <h1>AnyCompany Insurance Quote Tool - UPDATED</h1>
             <div class="user-info">
                 Welcome, Employee | ID: EMP123 | <a href="#" class="logout-link">Logout</a>
             </div>
@@ -472,10 +472,7 @@ function getTaskArn() {
 <script>
     function calculateQuote() {
         try {
-            // Intentionally cause an error by accessing an undefined variable
-            console.log(undefinedVariable);
-
-            // The code below will not be executed due to the error above
+            // This is a simple example calculation
             const coverageAmount = document.getElementById('coverageAmount').value;
             const riskLevel = document.getElementById('riskLevel').value;
             const term = document.getElementById('term').value;
@@ -508,7 +505,7 @@ function getTaskArn() {
             document.getElementById('quoteResults').style.display = 'block';
         } catch (error) {
             console.error('Error calculating quote:', error);
-            alert('An error occurred while calculating the quote: ' + error.message);
+            alert('An error occurred while calculating the quote');
         }
     }
 </script>
