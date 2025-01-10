@@ -117,7 +117,7 @@ function getTaskArn() {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <title>AnyCompany Insurance Quote Tool - UPDATED</title>
+    <title>AnyCompany Insurance Quote Tool</title>
     <style>
         /* Base styles */
         * {
@@ -473,7 +473,7 @@ function getTaskArn() {
     function calculateQuote() {
         try {
             // Intentionally cause an error by accessing an undefined variable
-            #console.log(undefinedVariable);
+            console.log(undefinedVariable);
 
             // The code below will not be executed due to the error above
             const coverageAmount = document.getElementById('coverageAmount').value;
