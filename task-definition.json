@@ -49,6 +49,6 @@
     "volumes": [],
     "placementConstraints": [],
     "requiresCompatibilities": ["FARGATE"],
-    "cpu": "256",
-    "memory": "512"
+    "cpu": "2048",
+    "memory": "2048"
 }
